@@ -1,42 +1,150 @@
 @import "tailwindcss";
 
-/* ─── Trusti Brand Tokens ─────────────────────────────────────────── */
-:root {
-  /* Palette */
-  --color-olive-black:     #0A1517;
-  --color-clarity-green:   #B9E856;
-  --color-lavender-purple: #9B5DE5;
-  --color-porcelain-white: #F9FAF5;
+/* ─────────────────────────────────────────────────────────────────────────────
+   TRUSTI COLOR PRIMITIVES
+   Full 100–900 scales for each brand hue.
+   Use these to build semantic tokens — never reference them directly in components.
+───────────────────────────────────────────────────────────────────────────── */
 
-  /* Typography */
+@theme {
+
+  /* ── Olive Black ── base #0A1517 → 900 */
+  --color-olive-black-100: #E6EAEB;
+  --color-olive-black-200: #C2CBCD;
+  --color-olive-black-300: #97A7AA;
+  --color-olive-black-400: #6A8286;
+  --color-olive-black-500: #435C60;
+  --color-olive-black-600: #2A3D41;
+  --color-olive-black-700: #182628;
+  --color-olive-black-800: #0F1B1D;
+  --color-olive-black-900: #0A1517;
+
+  /* ── Clarity Green ── base #B9E856 → 400 */
+  --color-clarity-green-100: #F4FDE0;
+  --color-clarity-green-200: #E8FAC2;
+  --color-clarity-green-300: #D4F38A;
+  --color-clarity-green-400: #B9E856;
+  --color-clarity-green-500: #9DD628;
+  --color-clarity-green-600: #7AB31A;
+  --color-clarity-green-700: #5A8512;
+  --color-clarity-green-800: #3C580B;
+  --color-clarity-green-900: #1E2C05;
+
+  /* ── Lavender Purple ── base #9B5DE5 → 500 */
+  --color-lavender-purple-100: #F3EAFD;
+  --color-lavender-purple-200: #E4CEFB;
+  --color-lavender-purple-300: #CEABF7;
+  --color-lavender-purple-400: #B57DF0;
+  --color-lavender-purple-500: #9B5DE5;
+  --color-lavender-purple-600: #7A3DC4;
+  --color-lavender-purple-700: #5C259A;
+  --color-lavender-purple-800: #3E1569;
+  --color-lavender-purple-900: #200838;
+
+  /* ── Porcelain White ── base #F9FAF5 → 100 */
+  --color-porcelain-white-100: #F9FAF5;
+  --color-porcelain-white-200: #EDEEE9;
+  --color-porcelain-white-300: #DADBD4;
+  --color-porcelain-white-400: #C4C5BF;
+  --color-porcelain-white-500: #A8A9A4;
+  --color-porcelain-white-600: #858680;
+  --color-porcelain-white-700: #616259;
+  --color-porcelain-white-800: #3E3F38;
+  --color-porcelain-white-900: #1E1F1A;
+
+  /* ── Typography ── */
   --font-heading: 'Montserrat', sans-serif;
   --font-body:    'Nunito', sans-serif;
+}
 
-  /* Semantic — light mode */
-  --background:         var(--color-porcelain-white);
-  --foreground:         var(--color-olive-black);
-  --primary:            var(--color-clarity-green);
-  --primary-foreground: var(--color-olive-black);
-  --secondary:          var(--color-lavender-purple);
-  --secondary-foreground: var(--color-porcelain-white);
-  --muted:              color-mix(in srgb, var(--color-olive-black) 70%, transparent);
-  --border:             color-mix(in srgb, var(--color-olive-black) 12%, transparent);
-  --radius:             0.5rem;
+/* ─────────────────────────────────────────────────────────────────────────────
+   SEMANTIC TOKENS
+   Map primitives to roles. These are what components consume.
+───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Surface */
+  --background:           var(--color-porcelain-white-100);
+  --background-subtle:    var(--color-porcelain-white-200);
+  --background-muted:     var(--color-porcelain-white-300);
+
+  /* Foreground */
+  --foreground:           var(--color-olive-black-900);
+  --foreground-muted:     var(--color-olive-black-600);
+  --foreground-subtle:    var(--color-olive-black-400);
+
+  /* Primary — Clarity Green */
+  --primary:              var(--color-clarity-green-400);
+  --primary-hover:        var(--color-clarity-green-300);
+  --primary-active:       var(--color-clarity-green-500);
+  --primary-foreground:   var(--color-olive-black-900);
+  --primary-subtle:       var(--color-clarity-green-100);
+
+  /* Secondary — Lavender Purple */
+  --secondary:            var(--color-lavender-purple-500);
+  --secondary-hover:      var(--color-lavender-purple-400);
+  --secondary-active:     var(--color-lavender-purple-600);
+  --secondary-foreground: var(--color-porcelain-white-100);
+  --secondary-subtle:     var(--color-lavender-purple-100);
+
+  /* Border */
+  --border:               var(--color-olive-black-200);
+  --border-strong:        var(--color-olive-black-400);
+
+  /* States */
+  --error:                #DC2626;
+  --error-subtle:         #FEE2E2;
+  --success:              var(--color-clarity-green-600);
+  --success-subtle:       var(--color-clarity-green-100);
+  --warning:              #D97706;
+  --warning-subtle:       #FEF3C7;
+
+  /* Radius */
+  --radius:               0.5rem;
 }
 
 .dark {
-  /* Semantic — dark mode */
-  --background:         var(--color-olive-black);
-  --foreground:         var(--color-porcelain-white);
-  --primary:            var(--color-clarity-green);
-  --primary-foreground: var(--color-olive-black);
-  --secondary:          var(--color-lavender-purple);
-  --secondary-foreground: var(--color-porcelain-white);
-  --muted:              color-mix(in srgb, var(--color-porcelain-white) 70%, transparent);
-  --border:             color-mix(in srgb, var(--color-porcelain-white) 12%, transparent);
+  /* Surface */
+  --background:           var(--color-olive-black-900);
+  --background-subtle:    var(--color-olive-black-800);
+  --background-muted:     var(--color-olive-black-700);
+
+  /* Foreground */
+  --foreground:           var(--color-porcelain-white-100);
+  --foreground-muted:     var(--color-porcelain-white-400);
+  --foreground-subtle:    var(--color-porcelain-white-600);
+
+  /* Primary — unchanged (green works on dark) */
+  --primary:              var(--color-clarity-green-400);
+  --primary-hover:        var(--color-clarity-green-300);
+  --primary-active:       var(--color-clarity-green-500);
+  --primary-foreground:   var(--color-olive-black-900);
+  --primary-subtle:       var(--color-clarity-green-900);
+
+  /* Secondary — unchanged */
+  --secondary:            var(--color-lavender-purple-500);
+  --secondary-hover:      var(--color-lavender-purple-400);
+  --secondary-active:     var(--color-lavender-purple-600);
+  --secondary-foreground: var(--color-porcelain-white-100);
+  --secondary-subtle:     var(--color-lavender-purple-900);
+
+  /* Border */
+  --border:               var(--color-olive-black-600);
+  --border-strong:        var(--color-olive-black-400);
+
+  /* States */
+  --error:                #F87171;
+  --error-subtle:         #450A0A;
+  --success:              var(--color-clarity-green-400);
+  --success-subtle:       var(--color-clarity-green-900);
+  --warning:              #FCD34D;
+  --warning-subtle:       #451A03;
 }
 
-/* ─── Base styles ─────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────────
+   BASE STYLES
+───────────────────────────────────────────────────────────────────────────── */
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -51,15 +159,4 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-}
-
-/* ─── Tailwind CSS v4 theme extension ─────────────────────────────── */
-@theme {
-  --color-olive-black:     #0A1517;
-  --color-clarity-green:   #B9E856;
-  --color-lavender-purple: #9B5DE5;
-  --color-porcelain-white: #F9FAF5;
-
-  --font-heading: 'Montserrat', sans-serif;
-  --font-body:    'Nunito', sans-serif;
 }
