@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+/* Scan trusti-ui components and prototype pages for Tailwind utility usage */
+@source "../../../packages/trusti-ui/src/**/*.{ts,tsx}";
+@source "./**/*.{ts,tsx}";
+
+/*
+  Trusti design system — primitive color tokens.
+  These mirror the @theme values from trusti-ui/src/styles/globals.css.
+  Defined here as plain :root CSS so they are available as CSS custom properties
+  in the prototypes app, independent of how Tailwind processes @theme blocks.
+*/
+
+:root {
+  /* ── Olive Black ── */
+  --color-olive-black-100: #E6EAEB;
+  --color-olive-black-200: #C2CBCD;
+  --color-olive-black-300: #97A7AA;
+  --color-olive-black-400: #6A8286;
+  --color-olive-black-500: #435C60;
+  --color-olive-black-600: #2A3D41;
+  --color-olive-black-700: #182628;
+  --color-olive-black-800: #0F1B1D;
+  --color-olive-black-900: #0A1517;
+
+  /* ── Clarity Green ── */
+  --color-clarity-green-100: #F4FDE0;
+  --color-clarity-green-200: #E8FAC2;
+  --color-clarity-green-300: #D4F38A;
+  --color-clarity-green-400: #B9E856;
+  --color-clarity-green-500: #9DD628;
+  --color-clarity-green-600: #7AB31A;
+  --color-clarity-green-700: #5A8512;
+  --color-clarity-green-800: #3C580B;
+  --color-clarity-green-900: #1E2C05;
+
+  /* ── Lavender Purple ── */
+  --color-lavender-purple-100: #F3EAFD;
+  --color-lavender-purple-200: #E4CEFB;
+  --color-lavender-purple-300: #CEABF7;
+  --color-lavender-purple-400: #B57DF0;
+  --color-lavender-purple-500: #9B5DE5;
+  --color-lavender-purple-600: #7A3DC4;
+  --color-lavender-purple-700: #5C259A;
+  --color-lavender-purple-800: #3E1569;
+  --color-lavender-purple-900: #200838;
+
+  /* ── Porcelain White ── */
+  --color-porcelain-white-100: #F9FAF5;
+  --color-porcelain-white-200: #EDEEE9;
+  --color-porcelain-white-300: #DADBD4;
+  --color-porcelain-white-400: #C4C5BF;
+  --color-porcelain-white-500: #A8A9A4;
+  --color-porcelain-white-600: #858680;
+  --color-porcelain-white-700: #616259;
+  --color-porcelain-white-800: #3E3F38;
+  --color-porcelain-white-900: #1E1F1A;
+
+  /* ── Radius ── */
+  --radius: 0.5rem;
+
+  /* ── Shorthand aliases (base values, used by component classes) ── */
+  --color-olive-black:     var(--color-olive-black-900);
+  --color-clarity-green:   var(--color-clarity-green-400);
+  --color-lavender-purple: var(--color-lavender-purple-500);
+  --color-porcelain-white: var(--color-porcelain-white-100);
+}

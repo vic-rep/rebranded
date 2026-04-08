@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "prototypes",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "--prefix", "apps/prototypes", "dev"],
+      "port": 3456,
+      "autoPort": true
+    }
+  ]
+}
