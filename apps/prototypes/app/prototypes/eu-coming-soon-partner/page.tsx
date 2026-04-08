@@ -32,9 +32,17 @@ const ANIM_CSS = `
     from { opacity: 0; }
     to   { opacity: 1; }
   }
-  @keyframes draw-line {
-    from { stroke-dashoffset: 2000; }
+
+  /* Contour draw-in — dasharray/offset must accommodate longest path (~3500 units) */
+  @keyframes draw-contour {
+    from { stroke-dashoffset: 5000; }
     to   { stroke-dashoffset: 0;    }
+  }
+
+  /* Accent contour gently breathes after draw-in completes */
+  @keyframes contour-breathe {
+    0%, 100% { opacity: 0.52; }
+    50%       { opacity: 0.32; }
   }
 
   .nav-enter {
@@ -71,7 +79,7 @@ const ANIM_CSS = `
     transform: rotate(8deg) scale(1.12);
   }
 
-  /* CTA arrow drift — the → slides right on hover */
+  /* CTA arrow drift */
   .cta-arrow {
     display: inline-block;
     transition: transform 0.22s ${EASE_OUT_QUART};
@@ -133,7 +141,6 @@ function useCounter(target: number, active: boolean, duration = 1200) {
     const step = (ts: number) => {
       if (!startTime) startTime = ts
       const progress = Math.min((ts - startTime) / duration, 1)
-      // ease-out-quart
       const eased = 1 - Math.pow(1 - progress, 4)
       setCount(Math.round(eased * target))
       if (progress < 1) requestAnimationFrame(step)
@@ -211,12 +218,11 @@ const pillars = [
   },
 ]
 
-// Stat values broken into countable parts for the counter animation
 const stats = [
-  { target: 3,     suffix: '+',  fmt: (n: number) => `${n}`,                   label: 'Markets and growing' },
-  { target: 120,   suffix: '+',  fmt: (n: number) => `${n}`,                   label: 'Insurance products available' },
-  { target: 10000, suffix: '+',  fmt: (n: number) => n.toLocaleString('en'),   label: 'Satisfied customers' },
-  { target: 49,    suffix: ' ★', fmt: (n: number) => (n / 10).toFixed(1),      label: 'Google rating' },
+  { target: 3,     suffix: '+',  fmt: (n: number) => `${n}`,                 label: 'Markets and growing' },
+  { target: 120,   suffix: '+',  fmt: (n: number) => `${n}`,                 label: 'Insurance products available' },
+  { target: 10000, suffix: '+',  fmt: (n: number) => n.toLocaleString('en'), label: 'Satisfied customers' },
+  { target: 49,    suffix: ' ★', fmt: (n: number) => (n / 10).toFixed(1),    label: 'Google rating' },
 ]
 
 const vps = [
@@ -247,31 +253,143 @@ const markets = [
   { code: 'DE', flag: '🇩🇪' },
 ]
 
-/* ─── Topographic background ────────────────────────────────────────────────── */
+/* ─── Cartographic topological background ──────────────────────────────────── */
+
+// Seeded linear-congruential RNG — deterministic output for stable path generation
+function mkRng(seed: number) {
+  let s = seed | 0
+  return () => {
+    s = (Math.imul(s, 1664525) + 1013904223) | 0
+    return (s >>> 0) / 4294967295
+  }
+}
+
+// Generate a smooth closed organic contour path.
+// Uses N anchor points distorted from a tilted ellipse, then converts
+// Catmull-Rom control points to cubic bezier curves for smooth interpolation.
+function organicEllipse(
+  cx: number, cy: number,
+  rx: number, ry: number,
+  tiltDeg: number,
+  wobble: number, // 0 = perfect ellipse, higher = more organic distortion
+  seed: number,
+  N = 12,
+): string {
+  const rng = mkRng(seed)
+  const tilt = (tiltDeg * Math.PI) / 180
+
+  const pts: [number, number][] = Array.from({ length: N }, (_, i) => {
+    const angle = (i / N) * 2 * Math.PI
+    const w = 1 + wobble * (rng() * 2 - 1)
+    // Distorted ellipse point in local space
+    const lx = rx * w * Math.cos(angle)
+    const ly = ry * w * Math.sin(angle)
+    // Rotate by tilt and translate to center
+    return [
+      cx + lx * Math.cos(tilt) - ly * Math.sin(tilt),
+      cy + lx * Math.sin(tilt) + ly * Math.cos(tilt),
+    ]
+  })
+
+  // Catmull-Rom → cubic bezier (closed), tension = 1/6
+  const d: string[] = [`M ${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`]
+  for (let i = 0; i < N; i++) {
+    const p0 = pts[(i - 1 + N) % N]
+    const p1 = pts[i]
+    const p2 = pts[(i + 1) % N]
+    const p3 = pts[(i + 2) % N]
+    const cp1x = (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1)
+    const cp1y = (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1)
+    const cp2x = (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1)
+    const cp2y = (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1)
+    d.push(`C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`)
+  }
+  d.push('Z')
+  return d.join(' ')
+}
+
+// Contour line descriptor
+interface TopoLine {
+  path: string
+  stroke: string
+  opacity: number
+  width: number
+  delay: number   // ms before draw-in starts
+  breathe: boolean // subtle post-draw opacity pulse (accent line only)
+}
+
+// Precomputed at module level — stable, no re-generation on re-render
+const TOPO_LINES: TopoLine[] = (() => {
+  const OB7 = 'var(--color-olive-black-700)'
+  const OB6 = 'var(--color-olive-black-600)'
+  const CG4 = 'var(--color-clarity-green-400)'
+  const lines: TopoLine[] = []
+
+  // ── Peak A — main prominence, center (1020, 390) ────────────────────────────
+  // 8 rings, outer-to-inner ordering (stagger draws outside-in)
+  const peakA = { cx: 1020, cy: 390 };
+  [
+    { rx: 580, ry: 375, tilt:  7, wobble: 0.13, seed: 800,  isIndex: false, isAccent: false },
+    { rx: 470, ry: 302, tilt:  8, wobble: 0.12, seed: 700,  isIndex: false, isAccent: false },
+    { rx: 372, ry: 240, tilt: 10, wobble: 0.11, seed: 600,  isIndex: true,  isAccent: false },
+    { rx: 285, ry: 184, tilt: 12, wobble: 0.10, seed: 500,  isIndex: false, isAccent: true  }, // clarity green
+    { rx: 210, ry: 135, tilt: 15, wobble: 0.09, seed: 400,  isIndex: true,  isAccent: false },
+    { rx: 145, ry:  96, tilt: 17, wobble: 0.07, seed: 300,  isIndex: false, isAccent: false },
+    { rx:  90, ry:  60, tilt: 20, wobble: 0.06, seed: 200,  isIndex: false, isAccent: false },
+    { rx:  48, ry:  32, tilt: 22, wobble: 0.04, seed: 100,  isIndex: false, isAccent: false },
+  ].forEach((r, i) => {
+    lines.push({
+      path:    organicEllipse(peakA.cx, peakA.cy, r.rx, r.ry, r.tilt, r.wobble, r.seed),
+      stroke:  r.isAccent ? CG4 : r.isIndex ? OB6 : OB7,
+      opacity: r.isAccent ? 0.52 : r.isIndex ? 0.44 : 0.28,
+      width:   r.isAccent ? 1.5  : r.isIndex ? 1.1  : 0.85,
+      delay:   i * 75,   // outer rings start first
+      breathe: r.isAccent,
+    })
+  })
+
+  // ── Peak B — secondary ridge, center (275, 670) ─────────────────────────────
+  // 5 rings, outer-to-inner
+  const peakB = { cx: 275, cy: 670 };
+  [
+    { rx: 355, ry: 225, tilt:  -8, wobble: 0.13, seed: 1500, isIndex: false },
+    { rx: 268, ry: 170, tilt:  -8, wobble: 0.11, seed: 1400, isIndex: false },
+    { rx: 188, ry: 119, tilt: -10, wobble: 0.09, seed: 1300, isIndex: true  },
+    { rx: 115, ry:  72, tilt: -12, wobble: 0.07, seed: 1200, isIndex: false },
+    { rx:  58, ry:  38, tilt: -14, wobble: 0.05, seed: 1100, isIndex: false },
+  ].forEach((r, i) => {
+    lines.push({
+      path:    organicEllipse(peakB.cx, peakB.cy, r.rx, r.ry, r.tilt, r.wobble, r.seed),
+      stroke:  r.isIndex ? OB6 : OB7,
+      opacity: r.isIndex ? 0.38 : 0.22,
+      width:   r.isIndex ? 1.0  : 0.80,
+      delay:   i * 75,
+      breathe: false,
+    })
+  })
+
+  // ── Peak C — off top-right edge, center (1360, -50) ─────────────────────────
+  // Only outer 3 rings intersect the viewport — give terrain a sense of extending beyond frame
+  const peakC = { cx: 1360, cy: -50 };
+  [
+    { rx: 380, ry: 270, tilt: -5, wobble: 0.11, seed: 2300, isIndex: false },
+    { rx: 272, ry: 193, tilt: -4, wobble: 0.09, seed: 2200, isIndex: true  },
+    { rx: 170, ry: 120, tilt: -3, wobble: 0.07, seed: 2100, isIndex: false },
+  ].forEach((r, i) => {
+    lines.push({
+      path:    organicEllipse(peakC.cx, peakC.cy, r.rx, r.ry, r.tilt, r.wobble, r.seed),
+      stroke:  r.isIndex ? OB6 : OB7,
+      opacity: r.isIndex ? 0.32 : 0.20,
+      width:   r.isIndex ? 0.95 : 0.75,
+      delay:   i * 75,
+      breathe: false,
+    })
+  })
+
+  return lines
+})()
 
 function TopoBackground() {
-  const lineColor   = 'var(--color-olive-black-700)'
-  const midColor    = 'var(--color-olive-black-600)'
-  const accentColor = 'var(--color-clarity-green-400)'
-
-  const lines: Array<{ d: string; color: string; opacity: number; width: number }> = [
-    { d: 'M-100 45 C 150 32 350 58 600 43 C 850 28 1100 52 1350 40 L 1600 45',   color: lineColor,   opacity: 0.35, width: 1   },
-    { d: 'M-100 108 C 200 95 420 118 680 104 C 940 90 1190 114 1440 101 L 1600 108', color: lineColor, opacity: 0.3,  width: 1   },
-    { d: 'M-100 170 C 130 157 380 173 630 160 C 880 147 1130 171 1380 158 L 1600 170', color: lineColor, opacity: 0.35, width: 1 },
-    { d: 'M-100 232 C 250 219 490 242 750 229 C 1010 216 1250 239 1500 226 L 1600 232', color: midColor, opacity: 0.4, width: 1  },
-    { d: 'M-100 294 C 160 281 400 304 660 291 C 920 278 1170 301 1420 288 L 1600 294', color: midColor, opacity: 0.4, width: 1  },
-    { d: 'M-100 356 C 230 343 480 366 740 353 C 1000 340 1250 363 1500 350 L 1600 356', color: midColor, opacity: 0.35, width: 1 },
-    { d: 'M-100 418 C 140 405 380 428 640 415 C 900 402 1150 425 1400 412 L 1600 418', color: lineColor, opacity: 0.3, width: 1  },
-    // Green accent — the single signal line
-    { d: 'M-100 480 C 200 467 440 490 700 477 C 960 464 1210 487 1460 474 L 1600 480', color: accentColor, opacity: 0.45, width: 1.5 },
-    { d: 'M-100 542 C 170 529 410 552 670 539 C 930 526 1180 549 1430 536 L 1600 542', color: lineColor, opacity: 0.3, width: 1  },
-    { d: 'M-100 604 C 240 591 480 614 740 601 C 1000 588 1250 611 1500 598 L 1600 604', color: lineColor, opacity: 0.35, width: 1 },
-    { d: 'M-100 666 C 150 653 390 676 650 663 C 910 650 1160 673 1410 660 L 1600 666', color: lineColor, opacity: 0.28, width: 1  },
-    { d: 'M-100 728 C 220 715 460 738 720 725 C 980 712 1230 735 1480 722 L 1600 728', color: lineColor, opacity: 0.25, width: 1  },
-    { d: 'M-100 790 C 130 777 370 800 630 787 C 890 774 1140 797 1390 784 L 1600 790', color: lineColor, opacity: 0.22, width: 1  },
-    { d: 'M-100 852 C 200 839 440 862 700 849 C 960 836 1210 859 1460 846 L 1600 852', color: lineColor, opacity: 0.18, width: 1  },
-  ]
-
   return (
     <svg
       className="absolute inset-0 w-full h-full pointer-events-none select-none"
@@ -280,18 +398,22 @@ function TopoBackground() {
       preserveAspectRatio="xMidYMid slice"
       aria-hidden
     >
-      {lines.map((line, i) => (
+      {TOPO_LINES.map((line, i) => (
         <path
           key={i}
-          d={line.d}
+          d={line.path}
           fill="none"
-          style={{
-            stroke: line.color,
-            strokeDasharray: '2000',
-            animation: `draw-line 1.6s ${EASE_OUT_EXPO} ${i * 65}ms both`,
-          }}
+          stroke={line.stroke}
           strokeWidth={line.width}
           opacity={line.opacity}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{
+            strokeDasharray: '5000',
+            animation: line.breathe
+              ? `draw-contour 2.2s ${EASE_OUT_EXPO} ${line.delay}ms both, contour-breathe 7s ease-in-out ${line.delay + 2200}ms infinite`
+              : `draw-contour 2.2s ${EASE_OUT_EXPO} ${line.delay}ms both`,
+          }}
         />
       ))}
     </svg>
@@ -319,13 +441,9 @@ function TrustiWordmark({ size = 'md', onDark = false }: { size?: 'sm' | 'md' | 
 
 function TrustiMark() {
   return (
-    // logo-mark class adds hover rotation delight
     <span className="logo-mark" aria-hidden>
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path
-          d="M10 1 L19 10 L10 19 L1 10 Z"
-          fill="var(--color-clarity-green-400)"
-        />
+        <path d="M10 1 L19 10 L10 19 L1 10 Z" fill="var(--color-clarity-green-400)" />
         <path
           d="M7 8.5 H13 M10 8.5 V13"
           stroke="var(--color-olive-black-900)"
@@ -339,10 +457,7 @@ function TrustiMark() {
 
 /* ─── Animated stat value ───────────────────────────────────────────────────── */
 
-function AnimatedStat({ stat, active }: {
-  stat: typeof stats[number]
-  active: boolean
-}) {
+function AnimatedStat({ stat, active }: { stat: typeof stats[number]; active: boolean }) {
   const count = useCounter(stat.target, active, stat.target >= 1000 ? 1400 : 1000)
   return <>{stat.fmt(count)}{stat.suffix}</>
 }
@@ -461,9 +576,7 @@ function Pillars() {
                   style={{ color: 'var(--color-porcelain-white-100)' }}
                 />
               </div>
-              <CardTitle
-                style={{ color: 'var(--color-porcelain-white-100)' }}
-              >
+              <CardTitle style={{ color: 'var(--color-porcelain-white-100)' }}>
                 {p.heading}
               </CardTitle>
             </CardHeader>
@@ -534,14 +647,10 @@ function LogoStrip() {
       <div className="mx-auto flex flex-col gap-8" style={{ maxWidth: '64rem' }}>
         <p
           className="font-[family-name:var(--font-body)] text-xs font-semibold uppercase tracking-widest text-center"
-          style={{
-            color: 'var(--foreground-subtle)',
-            ...revealStyle(inView, 0, 'in'),
-          }}
+          style={{ color: 'var(--foreground-subtle)', ...revealStyle(inView, 0, 'in') }}
         >
           Already trusted by leading European insurers.
         </p>
-
         <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
           {logoPlaceholders.map((name, i) => (
             <div
@@ -583,7 +692,6 @@ function B2BSection() {
         className="mx-auto flex flex-col items-center text-center"
         style={{ maxWidth: '56rem' }}
       >
-        {/* Headline */}
         <h2
           className="font-[family-name:var(--font-heading)] font-bold leading-tight"
           style={{
@@ -610,7 +718,6 @@ function B2BSection() {
           building your own comparison channel.
         </p>
 
-        {/* Value props */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 w-full mt-14 text-left">
           {vps.map((vp, i) => (
             <div
@@ -636,9 +743,7 @@ function B2BSection() {
               </h3>
               <p
                 className="font-[family-name:var(--font-body)] text-sm leading-relaxed"
-                style={{
-                  color: 'color-mix(in srgb, var(--color-porcelain-white-100) 65%, transparent)',
-                }}
+                style={{ color: 'color-mix(in srgb, var(--color-porcelain-white-100) 65%, transparent)' }}
               >
                 {vp.body}
               </p>
@@ -646,7 +751,6 @@ function B2BSection() {
           ))}
         </div>
 
-        {/* CTA — the single dominant interactive element */}
         <div
           className="flex flex-col items-center gap-4 mt-14 w-full"
           style={revealStyle(inView, 600)}
@@ -658,7 +762,6 @@ function B2BSection() {
             className="w-full sm:w-auto sm:px-10 text-base"
             style={{ letterSpacing: '-0.01em' }}
           >
-            {/* Arrow is a separate span so it can drift right on hover */}
             <a href="mailto:partnerships@trusti.bg">
               Partner with Trusti <span className="cta-arrow">→</span>
             </a>
@@ -666,9 +769,7 @@ function B2BSection() {
 
           <p
             className="font-[family-name:var(--font-body)] text-sm"
-            style={{
-              color: 'color-mix(in srgb, var(--color-porcelain-white-100) 55%, transparent)',
-            }}
+            style={{ color: 'color-mix(in srgb, var(--color-porcelain-white-100) 55%, transparent)' }}
           >
             Talk to our partnerships team. No commitment, no sales pressure —
             just a conversation.
@@ -692,7 +793,6 @@ function Footer() {
         className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16"
         style={{ maxWidth: '72rem' }}
       >
-        {/* Left — brand */}
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2.5">
             <TrustiMark />
@@ -706,16 +806,10 @@ function Footer() {
           </p>
         </div>
 
-        {/* Right — markets, regulatory, social */}
         <div className="flex flex-col gap-5">
-          {/* Market flags */}
           <div className="flex items-center gap-3 flex-wrap">
             {markets.map((m) => (
-              <div
-                key={m.code}
-                className="flex items-center gap-1.5"
-                title={m.code}
-              >
+              <div key={m.code} className="flex items-center gap-1.5" title={m.code}>
                 <span className="text-lg leading-none" aria-hidden>{m.flag}</span>
                 <span
                   className="font-[family-name:var(--font-body)] text-xs font-semibold tracking-widest uppercase"
@@ -727,7 +821,6 @@ function Footer() {
             ))}
           </div>
 
-          {/* Regulatory */}
           <p
             className="font-[family-name:var(--font-body)] leading-relaxed"
             style={{
@@ -741,43 +834,22 @@ function Footer() {
             expanding across Europe.
           </p>
 
-          {/* Social + copyright */}
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
-              <a
-                href="#"
-                aria-label="Trusti on LinkedIn"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-[var(--radius)] transition-colors duration-150"
-                style={{ color: 'var(--color-porcelain-white-600)' }}
-                onMouseEnter={(e) => {
-                  ;(e.currentTarget as HTMLElement).style.color =
-                    'var(--color-porcelain-white-100)'
-                }}
-                onMouseLeave={(e) => {
-                  ;(e.currentTarget as HTMLElement).style.color =
-                    'var(--color-porcelain-white-600)'
-                }}
-              >
-                <Icon name="linkedin" faStyle="brands" size={16} aria-hidden />
-              </a>
-              <a
-                href="#"
-                aria-label="Trusti on Instagram"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-[var(--radius)] transition-colors duration-150"
-                style={{ color: 'var(--color-porcelain-white-600)' }}
-                onMouseEnter={(e) => {
-                  ;(e.currentTarget as HTMLElement).style.color =
-                    'var(--color-porcelain-white-100)'
-                }}
-                onMouseLeave={(e) => {
-                  ;(e.currentTarget as HTMLElement).style.color =
-                    'var(--color-porcelain-white-600)'
-                }}
-              >
-                <Icon name="instagram" faStyle="brands" size={16} aria-hidden />
-              </a>
+              {(['linkedin', 'instagram'] as const).map((name) => (
+                <a
+                  key={name}
+                  href="#"
+                  aria-label={`Trusti on ${name.charAt(0).toUpperCase() + name.slice(1)}`}
+                  className="inline-flex items-center justify-center w-8 h-8 rounded-[var(--radius)] transition-colors duration-150"
+                  style={{ color: 'var(--color-porcelain-white-600)' }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--color-porcelain-white-100)' }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--color-porcelain-white-600)' }}
+                >
+                  <Icon name={name} faStyle="brands" size={16} aria-hidden />
+                </a>
+              ))}
             </div>
-
             <p
               className="font-[family-name:var(--font-body)]"
               style={{
@@ -797,7 +869,6 @@ function Footer() {
 /* ─── Page ──────────────────────────────────────────────────────────────────── */
 
 export default function EuComingSoonPartner() {
-  // Developer console easter egg — for curious engineers who open devtools
   React.useEffect(() => {
     // eslint-disable-next-line no-console
     console.log(
