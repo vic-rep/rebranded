@@ -147,31 +147,68 @@ interface TopoLine { path: string; stroke: string; opacity: number; width: numbe
 const TOPO_LINES: TopoLine[] = (() => {
   const OB7 = 'var(--color-olive-black-700)', OB6 = 'var(--color-olive-black-600)', CG4 = 'var(--color-clarity-green-400)'
   const lines: TopoLine[] = []
+  // N=16 anchor points for smoother organic curves
   const add = (cx: number, cy: number, rings: Array<{ rx: number; ry: number; tilt: number; wobble: number; seed: number; idx?: boolean; acc?: boolean }>) => {
-    rings.forEach((r, i) => lines.push({ path: organicEllipse(cx, cy, r.rx, r.ry, r.tilt, r.wobble, r.seed), stroke: r.acc ? CG4 : r.idx ? OB6 : OB7, opacity: r.acc ? 0.20 : r.idx ? 0.10 : 0.06, width: r.acc ? 1.5 : r.idx ? 1.1 : 0.85, delay: i * 75, breathe: !!r.acc }))
+    rings.forEach((r, i) => lines.push({ path: organicEllipse(cx, cy, r.rx, r.ry, r.tilt, r.wobble, r.seed, 16), stroke: r.acc ? CG4 : r.idx ? OB6 : OB7, opacity: r.acc ? 0.22 : r.idx ? 0.11 : 0.07, width: r.acc ? 1.6 : r.idx ? 1.1 : 0.8, delay: i * 55, breathe: !!r.acc }))
   }
+
+  // Peak 1 — dominant hill, right of centre
   add(1020, 390, [
-    { rx: 580, ry: 375, tilt: 7,  wobble: 0.13, seed: 800 },
-    { rx: 470, ry: 302, tilt: 8,  wobble: 0.12, seed: 700 },
-    { rx: 372, ry: 240, tilt: 10, wobble: 0.11, seed: 600, idx: true },
-    { rx: 285, ry: 184, tilt: 12, wobble: 0.10, seed: 500, acc: true },
-    { rx: 210, ry: 135, tilt: 15, wobble: 0.09, seed: 400, idx: true },
-    { rx: 145, ry: 96,  tilt: 17, wobble: 0.07, seed: 300 },
-    { rx: 90,  ry: 60,  tilt: 20, wobble: 0.06, seed: 200 },
-    { rx: 48,  ry: 32,  tilt: 22, wobble: 0.04, seed: 100 },
+    { rx: 630, ry: 406, tilt: 6,  wobble: 0.12, seed: 800  },
+    { rx: 545, ry: 352, tilt: 7,  wobble: 0.12, seed: 802  },
+    { rx: 464, ry: 299, tilt: 7,  wobble: 0.12, seed: 700  },
+    { rx: 390, ry: 252, tilt: 8,  wobble: 0.11, seed: 702  },
+    { rx: 324, ry: 209, tilt: 10, wobble: 0.11, seed: 600, idx: true },
+    { rx: 264, ry: 170, tilt: 11, wobble: 0.10, seed: 602  },
+    { rx: 210, ry: 136, tilt: 13, wobble: 0.09, seed: 500, acc: true },
+    { rx: 163, ry: 105, tilt: 15, wobble: 0.09, seed: 502, idx: true },
+    { rx: 122, ry: 79,  tilt: 17, wobble: 0.08, seed: 400  },
+    { rx: 88,  ry: 57,  tilt: 18, wobble: 0.07, seed: 402  },
+    { rx: 60,  ry: 39,  tilt: 20, wobble: 0.06, seed: 300  },
+    { rx: 38,  ry: 24,  tilt: 22, wobble: 0.05, seed: 302  },
   ])
+
+  // Peak 2 — secondary hill, lower left
   add(275, 670, [
-    { rx: 355, ry: 225, tilt: -8,  wobble: 0.13, seed: 1500 },
-    { rx: 268, ry: 170, tilt: -8,  wobble: 0.11, seed: 1400 },
-    { rx: 188, ry: 119, tilt: -10, wobble: 0.09, seed: 1300, idx: true },
-    { rx: 115, ry: 72,  tilt: -12, wobble: 0.07, seed: 1200 },
-    { rx: 58,  ry: 38,  tilt: -14, wobble: 0.05, seed: 1100 },
+    { rx: 430, ry: 272, tilt: -7,  wobble: 0.13, seed: 1500 },
+    { rx: 348, ry: 220, tilt: -7,  wobble: 0.12, seed: 1502 },
+    { rx: 275, ry: 174, tilt: -8,  wobble: 0.11, seed: 1400 },
+    { rx: 210, ry: 133, tilt: -10, wobble: 0.10, seed: 1402, idx: true },
+    { rx: 154, ry: 97,  tilt: -11, wobble: 0.09, seed: 1300 },
+    { rx: 106, ry: 67,  tilt: -12, wobble: 0.08, seed: 1302, acc: true },
+    { rx: 66,  ry: 42,  tilt: -14, wobble: 0.07, seed: 1200 },
+    { rx: 36,  ry: 23,  tilt: -15, wobble: 0.05, seed: 1202 },
   ])
-  add(1360, -50, [
-    { rx: 380, ry: 270, tilt: -5, wobble: 0.11, seed: 2300 },
-    { rx: 272, ry: 193, tilt: -4, wobble: 0.09, seed: 2200, idx: true },
-    { rx: 170, ry: 120, tilt: -3, wobble: 0.07, seed: 2100 },
+
+  // Peak 3 — top-right corner, partially cropped
+  add(1395, -45, [
+    { rx: 500, ry: 355, tilt: -4, wobble: 0.11, seed: 2300 },
+    { rx: 400, ry: 284, tilt: -4, wobble: 0.10, seed: 2302 },
+    { rx: 308, ry: 219, tilt: -3, wobble: 0.09, seed: 2200, idx: true },
+    { rx: 224, ry: 159, tilt: -2, wobble: 0.08, seed: 2202 },
+    { rx: 152, ry: 108, tilt: -2, wobble: 0.07, seed: 2100 },
+    { rx: 92,  ry: 65,  tilt: -1, wobble: 0.06, seed: 2102 },
   ])
+
+  // Peak 4 — top-left, partially cropped
+  add(118, 105, [
+    { rx: 340, ry: 222, tilt: 14, wobble: 0.14, seed: 3100 },
+    { rx: 264, ry: 172, tilt: 14, wobble: 0.13, seed: 3102 },
+    { rx: 196, ry: 128, tilt: 14, wobble: 0.11, seed: 3200, idx: true },
+    { rx: 136, ry: 89,  tilt: 15, wobble: 0.10, seed: 3202 },
+    { rx: 84,  ry: 55,  tilt: 16, wobble: 0.08, seed: 3300 },
+    { rx: 44,  ry: 29,  tilt: 17, wobble: 0.06, seed: 3302 },
+  ])
+
+  // Peak 5 — bottom-right corner, partially cropped
+  add(1490, 855, [
+    { rx: 380, ry: 242, tilt: -5, wobble: 0.12, seed: 4100 },
+    { rx: 292, ry: 186, tilt: -5, wobble: 0.11, seed: 4102 },
+    { rx: 212, ry: 135, tilt: -4, wobble: 0.10, seed: 4200, idx: true },
+    { rx: 140, ry: 89,  tilt: -4, wobble: 0.09, seed: 4202 },
+    { rx: 78,  ry: 50,  tilt: -3, wobble: 0.07, seed: 4300 },
+  ])
+
   return lines
 })()
 
