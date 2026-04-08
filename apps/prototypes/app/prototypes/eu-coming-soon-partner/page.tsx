@@ -17,7 +17,7 @@ const EASE_OUT_EXPO  = 'cubic-bezier(0.16, 1, 0.3, 1)'
 const EASE_OUT_QUINT = 'cubic-bezier(0.22, 1, 0.36, 1)'
 const EASE_OUT_QUART = 'cubic-bezier(0.25, 1, 0.5, 1)'
 
-/* ─── Animation styles ──────────────────────────────────────────────────────── */
+/* ─── Animation + delight styles ───────────────────────────────────────────── */
 
 const ANIM_CSS = `
   @keyframes nav-enter {
@@ -49,6 +49,8 @@ const ANIM_CSS = `
   .hero-tag {
     animation: fade-in 0.45s ${EASE_OUT_QUART} 0.65s both;
   }
+
+  /* Pillar card hover lift */
   .pillar-card {
     transition:
       transform 0.22s ${EASE_OUT_QUART},
@@ -59,9 +61,31 @@ const ANIM_CSS = `
     box-shadow: 0 10px 36px rgba(0, 0, 0, 0.28);
   }
 
+  /* Logo mark hover — subtle rotation delight */
+  .logo-mark {
+    display: inline-flex;
+    transition: transform 0.28s ${EASE_OUT_QUART};
+    cursor: default;
+  }
+  .logo-mark:hover {
+    transform: rotate(8deg) scale(1.12);
+  }
+
+  /* CTA arrow drift — the → slides right on hover */
+  .cta-arrow {
+    display: inline-block;
+    transition: transform 0.22s ${EASE_OUT_QUART};
+  }
+  a:hover .cta-arrow,
+  button:hover .cta-arrow {
+    transform: translateX(5px);
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .nav-enter, .hero-h1, .hero-p, .hero-tag {
+    .nav-enter, .hero-h1, .hero-p, .hero-tag,
+    .logo-mark, .cta-arrow, .pillar-card {
       animation: none !important;
+      transition: none !important;
     }
     * {
       animation-duration: 0.01ms !important;
@@ -92,6 +116,62 @@ function useInView(threshold = 0.12) {
     return () => obs.disconnect()
   }, [threshold])
   return [ref, inView] as const
+}
+
+/* ─── useCounter hook ───────────────────────────────────────────────────────── */
+
+function useCounter(target: number, active: boolean, duration = 1200) {
+  const [count, setCount] = React.useState(0)
+  React.useEffect(() => {
+    if (!active) return
+    if (typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setCount(target)
+      return
+    }
+    let startTime: number | null = null
+    const step = (ts: number) => {
+      if (!startTime) startTime = ts
+      const progress = Math.min((ts - startTime) / duration, 1)
+      // ease-out-quart
+      const eased = 1 - Math.pow(1 - progress, 4)
+      setCount(Math.round(eased * target))
+      if (progress < 1) requestAnimationFrame(step)
+    }
+    requestAnimationFrame(step)
+  }, [active, target, duration])
+  return count
+}
+
+/* ─── Scroll progress bar ───────────────────────────────────────────────────── */
+
+function ScrollProgress() {
+  const [pct, setPct] = React.useState(0)
+  React.useEffect(() => {
+    const update = () => {
+      const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+      const max = scrollHeight - clientHeight
+      setPct(max > 0 ? (scrollTop / max) * 100 : 0)
+    }
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [])
+  return (
+    <div
+      aria-hidden
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        height: '2px',
+        width: `${pct}%`,
+        backgroundColor: 'var(--color-clarity-green-400)',
+        zIndex: 200,
+        pointerEvents: 'none',
+        transition: 'width 0.08s linear',
+      }}
+    />
+  )
 }
 
 /* ─── Reveal style helper ───────────────────────────────────────────────────── */
@@ -131,11 +211,12 @@ const pillars = [
   },
 ]
 
+// Stat values broken into countable parts for the counter animation
 const stats = [
-  { value: '3+', label: 'Markets and growing' },
-  { value: '120+', label: 'Insurance products available' },
-  { value: '10,000+', label: 'Satisfied customers' },
-  { value: '4.9 ★', label: 'Google rating' },
+  { target: 3,     suffix: '+',  fmt: (n: number) => `${n}`,                   label: 'Markets and growing' },
+  { target: 120,   suffix: '+',  fmt: (n: number) => `${n}`,                   label: 'Insurance products available' },
+  { target: 10000, suffix: '+',  fmt: (n: number) => n.toLocaleString('en'),   label: 'Satisfied customers' },
+  { target: 49,    suffix: ' ★', fmt: (n: number) => (n / 10).toFixed(1),      label: 'Google rating' },
 ]
 
 const vps = [
@@ -238,19 +319,32 @@ function TrustiWordmark({ size = 'md', onDark = false }: { size?: 'sm' | 'md' | 
 
 function TrustiMark() {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
-      <path
-        d="M10 1 L19 10 L10 19 L1 10 Z"
-        fill="var(--color-clarity-green-400)"
-      />
-      <path
-        d="M7 8.5 H13 M10 8.5 V13"
-        stroke="var(--color-olive-black-900)"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-    </svg>
+    // logo-mark class adds hover rotation delight
+    <span className="logo-mark" aria-hidden>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path
+          d="M10 1 L19 10 L10 19 L1 10 Z"
+          fill="var(--color-clarity-green-400)"
+        />
+        <path
+          d="M7 8.5 H13 M10 8.5 V13"
+          stroke="var(--color-olive-black-900)"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+      </svg>
+    </span>
   )
+}
+
+/* ─── Animated stat value ───────────────────────────────────────────────────── */
+
+function AnimatedStat({ stat, active }: {
+  stat: typeof stats[number]
+  active: boolean
+}) {
+  const count = useCounter(stat.target, active, stat.target >= 1000 ? 1400 : 1000)
+  return <>{stat.fmt(count)}{stat.suffix}</>
 }
 
 /* ─── Page sections ─────────────────────────────────────────────────────────── */
@@ -407,14 +501,14 @@ function Stats() {
             style={revealStyle(inView, i * 100)}
           >
             <span
-              className="font-[family-name:var(--font-heading)] font-bold leading-none"
+              className="font-[family-name:var(--font-heading)] font-bold leading-none tabular-nums"
               style={{
                 fontSize: 'clamp(2rem, 4vw, 3rem)',
                 color: 'var(--color-clarity-green-400)',
                 letterSpacing: '-0.03em',
               }}
             >
-              {s.value}
+              <AnimatedStat stat={s} active={inView} />
             </span>
             <span
               className="font-[family-name:var(--font-body)] text-sm leading-snug"
@@ -517,9 +611,7 @@ function B2BSection() {
         </p>
 
         {/* Value props */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 w-full mt-14 text-left"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 w-full mt-14 text-left">
           {vps.map((vp, i) => (
             <div
               key={vp.heading}
@@ -566,8 +658,9 @@ function B2BSection() {
             className="w-full sm:w-auto sm:px-10 text-base"
             style={{ letterSpacing: '-0.01em' }}
           >
+            {/* Arrow is a separate span so it can drift right on hover */}
             <a href="mailto:partnerships@trusti.bg">
-              Partner with Trusti →
+              Partner with Trusti <span className="cta-arrow">→</span>
             </a>
           </Button>
 
@@ -704,10 +797,25 @@ function Footer() {
 /* ─── Page ──────────────────────────────────────────────────────────────────── */
 
 export default function EuComingSoonPartner() {
+  // Developer console easter egg — for curious engineers who open devtools
+  React.useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log(
+      '%c Trusti ',
+      'background: #B9E856; color: #0A1517; font-size: 16px; font-weight: 700; padding: 3px 8px; border-radius: 4px;',
+    )
+    // eslint-disable-next-line no-console
+    console.log(
+      '%cInsurance without the runaround.\n\nWe\'re building the future of European insurance distribution.\nCurious about what we\'re building? → partnerships@trusti.bg',
+      'color: #97A7AA; font-size: 11px; line-height: 1.7;',
+    )
+  }, [])
+
   return (
     <div style={{ backgroundColor: 'var(--color-olive-black-900)' }}>
       {/* eslint-disable-next-line react/no-danger */}
       <style dangerouslySetInnerHTML={{ __html: ANIM_CSS }} />
+      <ScrollProgress />
       <NavBar />
       <main>
         <Hero />
