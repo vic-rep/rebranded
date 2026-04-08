@@ -114,7 +114,7 @@ function TopoBackground() {
 
 /* ─── Trusti wordmark ───────────────────────────────────────────────────────── */
 
-function TrustiWordmark({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
+function TrustiWordmark({ size = 'md', onDark = false }: { size?: 'sm' | 'md' | 'lg'; onDark?: boolean }) {
   const sizes = { sm: '1rem', md: '1.125rem', lg: '1.5rem' }
   return (
     <span
@@ -122,7 +122,7 @@ function TrustiWordmark({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
         fontFamily: 'var(--font-heading)',
         fontWeight: 700,
         fontSize: sizes[size],
-        color: 'var(--color-porcelain-white-100)',
+        color: onDark ? 'var(--color-porcelain-white-100)' : 'var(--foreground)',
         letterSpacing: '-0.02em',
       }}
     >
@@ -155,10 +155,10 @@ function NavBar() {
     <nav
       className="sticky top-0 z-50 w-full"
       style={{
-        backgroundColor: 'color-mix(in srgb, var(--color-olive-black-900) 95%, transparent)',
+        backgroundColor: 'color-mix(in srgb, var(--background) 95%, transparent)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: '1px solid var(--color-olive-black-700)',
+        borderBottom: '1px solid var(--border)',
       }}
     >
       <div
@@ -472,7 +472,7 @@ function Footer() {
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2.5">
             <TrustiMark />
-            <TrustiWordmark size="md" />
+            <TrustiWordmark size="md" onDark />
           </div>
           <p
             className="font-[family-name:var(--font-body)] font-semibold text-sm tracking-wide"
