@@ -124,3 +124,34 @@ export type { CTABannerProps } from './components/CTABanner'
 
 export { PartnerLogoStrip } from './components/PartnerLogoStrip'
 export type { PartnerLogoStripProps, PartnerLogo } from './components/PartnerLogoStrip'
+
+// ─── Motion ───────────────────────────────────────────────────────────────────
+export { FadeIn } from './motion/FadeIn'
+export type { FadeInProps, FadeInDirection } from './motion/FadeIn'
+
+export { StaggerChildren } from './motion/StaggerChildren'
+export type { StaggerChildrenProps } from './motion/StaggerChildren'
+
+export { ScaleOnHover } from './motion/ScaleOnHover'
+export type { ScaleOnHoverProps } from './motion/ScaleOnHover'
+
+export { AnimatedNumber } from './motion/AnimatedNumber'
+export type { AnimatedNumberProps } from './motion/AnimatedNumber'
+
+export { PresenceTransition } from './motion/PresenceTransition'
+export type { PresenceTransitionProps, PresenceMode } from './motion/PresenceTransition'
+
+export {
+  easeOut, easeIn, easeInOut,
+  microTransition, standardTransition, revealTransition,
+  springTransition, softSpringTransition,
+  fadeInUpVariants, fadeInDownVariants, fadeInLeftVariants,
+  fadeInRightVariants, fadeInVariants,
+  staggerContainerVariants, staggerItemVariants,
+} from './motion/presets'
+
+export {
+  motion, AnimatePresence,
+  useReducedMotion, useInView, useScroll,
+  useTransform, useSpring, useMotionValue,
+} from './motion/index'
