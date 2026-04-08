@@ -1,6 +1,5 @@
 import * as React from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 // Drawer reuses Radix Dialog with slide-from-right positioning
@@ -51,7 +50,7 @@ const DrawerContent = React.forwardRef<
         'text-[var(--foreground-muted)] hover:text-[var(--foreground)]',
         'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]'
       )}>
-        <X className="h-4 w-4" />
+        <i className="fa-solid fa-xmark text-base" aria-hidden="true" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
       {children}

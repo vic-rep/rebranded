@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Check } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 export type StepStatus = 'completed' | 'active' | 'pending'
@@ -65,7 +64,7 @@ function StepIndicator({
                   )}
                 >
                   {status === 'completed' ? (
-                    <Check className="h-4 w-4" strokeWidth={3} />
+                    <i className="fa-solid fa-check text-sm" aria-hidden="true" />
                   ) : (
                     <span>{index + 1}</span>
                   )}

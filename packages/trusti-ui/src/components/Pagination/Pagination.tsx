@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { buttonVariants } from '../Button/Button'
 
@@ -39,7 +38,7 @@ PaginationLink.displayName = 'PaginationLink'
 
 const PaginationPrevious = ({ className, ...props }: React.ComponentProps<typeof PaginationLink>) => (
   <PaginationLink aria-label="Go to previous page" className={cn('w-auto px-3 gap-1', className)} {...props}>
-    <ChevronLeft className="h-4 w-4" />
+    <i className="fa-solid fa-chevron-left text-sm" aria-hidden="true" />
     <span className="text-sm font-[family-name:var(--font-body)]">Previous</span>
   </PaginationLink>
 )
@@ -48,14 +47,14 @@ PaginationPrevious.displayName = 'PaginationPrevious'
 const PaginationNext = ({ className, ...props }: React.ComponentProps<typeof PaginationLink>) => (
   <PaginationLink aria-label="Go to next page" className={cn('w-auto px-3 gap-1', className)} {...props}>
     <span className="text-sm font-[family-name:var(--font-body)]">Next</span>
-    <ChevronRight className="h-4 w-4" />
+    <i className="fa-solid fa-chevron-right text-sm" aria-hidden="true" />
   </PaginationLink>
 )
 PaginationNext.displayName = 'PaginationNext'
 
 const PaginationEllipsis = ({ className, ...props }: React.ComponentProps<'span'>) => (
   <span aria-hidden className={cn('flex h-9 w-9 items-center justify-center text-[var(--foreground-muted)]', className)} {...props}>
-    <MoreHorizontal className="h-4 w-4" />
+    <i className="fa-solid fa-ellipsis text-sm" aria-hidden="true" />
     <span className="sr-only">More pages</span>
   </span>
 )
