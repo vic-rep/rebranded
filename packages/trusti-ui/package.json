@@ -40,8 +40,8 @@
   },
   "optionalDependencies": {
     "@tailwindcss/oxide-darwin-arm64": "4.2.2",
-    "@tailwindcss/oxide-linux-x64-gnu": "4.2.2",
     "@tailwindcss/oxide-linux-arm64-gnu": "4.2.2",
+    "@tailwindcss/oxide-linux-x64-gnu": "4.2.2",
     "@tailwindcss/oxide-win32-x64-msvc": "4.2.2"
   },
   "dependencies": {
@@ -64,6 +64,7 @@
     "class-variance-authority": "^0.7",
     "clsx": "^2",
     "lucide-react": "^0.511.0",
+    "motion": "^12.38.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.72.1",

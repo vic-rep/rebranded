@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '../Card/Card'
 import { Button } from '../Button/Button'
 import { Badge } from '../Badge/Badge'
 import { RatingDisplay } from '../RatingDisplay/RatingDisplay'
+import { ScaleOnHover } from '../../motion/ScaleOnHover'
 
 export interface InsuranceProductCardProps extends React.HTMLAttributes<HTMLDivElement> {
   icon: React.ReactNode
@@ -18,6 +19,8 @@ export interface InsuranceProductCardProps extends React.HTMLAttributes<HTMLDivE
   ctaLabel?: string
   onCta?: () => void
   features?: string[]
+  /** Wrap the card in a ScaleOnHover motion lift. Default: false */
+  animated?: boolean
 }
 
 function InsuranceProductCard({
@@ -34,9 +37,10 @@ function InsuranceProductCard({
   onCta,
   features,
   className,
+  animated = false,
   ...props
 }: InsuranceProductCardProps) {
-  return (
+  const card = (
     <Card className={cn('flex flex-col h-full', className)} {...props}>
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
@@ -88,6 +92,16 @@ function InsuranceProductCard({
       </CardFooter>
     </Card>
   )
+
+  if (animated) {
+    return (
+      <ScaleOnHover style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        {card}
+      </ScaleOnHover>
+    )
+  }
+
+  return card
 }
 
 export { InsuranceProductCard }
