@@ -1,4 +1,3 @@
-'use client'
 import { Toaster as SonnerToaster, toast } from 'sonner'
 
 // Re-export Sonner's Toaster with Trusti defaults applied

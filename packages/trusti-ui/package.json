@@ -38,6 +38,12 @@
     "storybook": "^8.6.12",
     "typescript": "^5"
   },
+  "optionalDependencies": {
+    "@tailwindcss/oxide-darwin-arm64": "4.2.2",
+    "@tailwindcss/oxide-linux-x64-gnu": "4.2.2",
+    "@tailwindcss/oxide-linux-arm64-gnu": "4.2.2",
+    "@tailwindcss/oxide-win32-x64-msvc": "4.2.2"
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-accordion": "^1.2.12",
