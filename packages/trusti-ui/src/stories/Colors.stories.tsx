@@ -84,13 +84,38 @@ function Swatch({ hex, label, isBase }: { hex: string; label: string; isBase: bo
   )
 }
 
+const philosophy = [
+  { color: '#F9FAF5', label: 'Porcelain White', rule: 'The canvas — dominant background. Use liberally.' },
+  { color: '#0A1517', label: 'Olive Black', rule: 'Text + dark sections. Never use as a tint or accent.' },
+  { color: '#B9E856', label: 'Clarity Green', rule: '≤ 8% of any screen. One primary CTA or key highlight only.' },
+  { color: '#9B5DE5', label: 'Lavender Purple', rule: '≤ 2% of any screen. Badges, tags, micro-accents. 1–2 touches max.' },
+]
+
 function ColorScales() {
   return (
     <div style={{ padding: '2rem', background: 'var(--background)', minHeight: '100vh', fontFamily: 'var(--font-body)' }}>
-      <h1 style={{ fontFamily: 'var(--font-heading)', color: 'var(--foreground)', marginBottom: '0.5rem' }}>Colour Primitives</h1>
-      <p style={{ color: 'var(--foreground-muted)', marginBottom: '3rem', fontSize: '0.875rem' }}>
+      <h1 style={{ fontFamily: 'var(--font-heading)', color: 'var(--foreground)', marginBottom: '0.5rem' }}>Colour System</h1>
+      <p style={{ color: 'var(--foreground-muted)', marginBottom: '2rem', fontSize: '0.875rem' }}>
         Full 100–900 scale for each brand hue. The <span style={{ color: '#B9E856' }}>highlighted</span> swatch is the brand base.
       </p>
+
+      {/* Philosophy */}
+      <div style={{ background: 'var(--background-subtle)', borderRadius: '0.5rem', padding: '1.5rem', marginBottom: '3rem', border: '1px solid var(--border)' }}>
+        <h2 style={{ fontFamily: 'var(--font-heading)', color: 'var(--foreground)', fontSize: '0.875rem', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+          Design Philosophy
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.75rem' }}>
+          {philosophy.map(({ color, label, rule }) => (
+            <div key={label} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+              <div style={{ width: '32px', height: '32px', borderRadius: '6px', background: color, flexShrink: 0, border: '1px solid var(--border)' }} />
+              <div>
+                <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 700, color: 'var(--foreground)', fontFamily: 'var(--font-heading)' }}>{label}</p>
+                <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: 'var(--foreground-muted)', lineHeight: 1.4 }}>{rule}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {palettes.map((palette) => (
         <div key={palette.prefix} style={{ marginBottom: '3rem' }}>

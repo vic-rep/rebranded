@@ -1,6 +1,38 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   TRUSTI DESIGN PHILOSOPHY — COLOUR
+   ─────────────────────────────────────────────────────────────────────────────
+
+   Porcelain White  →  The canvas. Default background in light mode. Dominant
+                       presence on every screen. Use liberally for surfaces,
+                       cards, and whitespace.
+
+   Olive Black      →  Text and structure. Primary foreground colour, and the
+                       background for dark sections (hero areas, footers, dark
+                       cards). Never use as a tint or accent.
+
+   Clarity Green    →  The signal. Reserved for the single most important
+                       action or highlight on a screen (primary CTA, key stat,
+                       active state). Must not exceed ~8 % of any screen's
+                       visible area. If green is appearing everywhere, pull back.
+
+   Lavender Purple  →  The whisper. Micro-accents only — badges, tags, icons,
+                       active pills. Must not exceed ~2 % of any screen's
+                       visible area. One or two touches per page maximum.
+
+   ENFORCEMENT RULES (apply when reviewing any prototype or component):
+   • Never place green and purple adjacently — they compete.
+   • Never fill a large surface with green or purple.
+   • If a screen feels colourful, it has too much green or purple — remove some.
+   • Dark sections use Olive Black background + Porcelain White text only.
+     Green/purple may appear as a single accent element within a dark section.
+   • Human at the surface, technology at the core.
+   • Clarity over persuasion — no dark patterns, no urgency tricks.
+   • Simplicity without loss — reduce friction, never remove useful information.
+   • Build confidence through transparency.
+
+   ─────────────────────────────────────────────────────────────────────────────
    TRUSTI COLOR PRIMITIVES
    Full 100–900 scales for each brand hue.
    Use these to build semantic tokens — never reference them directly in components.
