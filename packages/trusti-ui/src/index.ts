@@ -124,3 +124,6 @@ export type { CTABannerProps } from './components/CTABanner'
 
 export { PartnerLogoStrip } from './components/PartnerLogoStrip'
 export type { PartnerLogoStripProps, PartnerLogo } from './components/PartnerLogoStrip'
+
+export { ThemeToggle } from './components/ThemeToggle'
+export type { ThemeToggleProps } from './components/ThemeToggle'
