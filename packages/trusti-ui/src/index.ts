@@ -17,9 +17,7 @@ export {
 } from './components/Select'
 
 export { Checkbox } from './components/Checkbox'
-
 export { RadioGroup, RadioGroupItem } from './components/Radio'
-
 export { Switch } from './components/Switch'
 
 export { Textarea } from './components/Textarea'
@@ -29,9 +27,7 @@ export { Label } from './components/Label'
 export type { LabelProps } from './components/Label'
 
 export { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from './components/Tooltip'
-
 export { Avatar, AvatarImage, AvatarFallback } from './components/Avatar'
-
 export { Separator } from './components/Separator'
 
 export { Skeleton } from './components/Skeleton'
@@ -39,3 +35,55 @@ export type { SkeletonProps } from './components/Skeleton'
 
 export { Icon } from './components/Icon'
 export type { IconProps } from './components/Icon'
+
+// ─── Tier 2 — Composition ─────────────────────────────────────────────────────
+export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './components/Card'
+
+export { Alert, AlertTitle, AlertDescription, alertVariants } from './components/Alert'
+export type { AlertProps } from './components/Alert'
+
+export {
+  Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter,
+  DialogTitle, DialogDescription, DialogClose,
+} from './components/Dialog'
+
+export {
+  Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerFooter,
+  DrawerTitle, DrawerDescription, DrawerClose,
+} from './components/Drawer'
+
+export {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuGroup,
+  DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioItem, DropdownMenuRadioGroup,
+  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut,
+  DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent, DropdownMenuPortal,
+} from './components/DropdownMenu'
+
+export {
+  NavigationMenu, NavigationMenuList, NavigationMenuItem,
+  NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink,
+  NavigationMenuViewport, NavigationMenuIndicator, navigationMenuTriggerStyle,
+} from './components/NavigationMenu'
+
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './components/Tabs'
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from './components/Accordion'
+
+export {
+  Form, FormField, FormItem, FormLabel, FormControl,
+  FormDescription, FormMessage, useFormField,
+} from './components/Form'
+
+export {
+  Table, TableHeader, TableBody, TableFooter,
+  TableRow, TableHead, TableCell, TableCaption,
+} from './components/Table'
+
+export {
+  Pagination, PaginationContent, PaginationItem, PaginationLink,
+  PaginationPrevious, PaginationNext, PaginationEllipsis,
+} from './components/Pagination'
+
+export { Toaster, toast } from './components/Toast'
+
+export { Progress } from './components/Progress'
+export type { ProgressProps } from './components/Progress'
