@@ -34,7 +34,7 @@ export { Skeleton } from './components/Skeleton'
 export type { SkeletonProps } from './components/Skeleton'
 
 export { Icon } from './components/Icon'
-export type { IconProps } from './components/Icon'
+export type { IconProps, FaStyle } from './components/Icon'
 
 // ─── Tier 2 — Composition ─────────────────────────────────────────────────────
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './components/Card'

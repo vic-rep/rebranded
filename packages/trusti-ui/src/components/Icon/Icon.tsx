@@ -1,17 +1,35 @@
 import * as React from 'react'
-import { type LucideIcon, type LucideProps } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
-export interface IconProps extends LucideProps {
-  icon: LucideIcon
+export type FaStyle = 'solid' | 'regular' | 'light' | 'thin' | 'duotone' | 'brands'
+
+export interface IconProps extends React.HTMLAttributes<HTMLElement> {
+  /** Font Awesome icon name without the 'fa-' prefix. E.g. "shield-check", "car", "house" */
+  name: string
+  /** Font Awesome style prefix. Default: 'solid' */
+  faStyle?: FaStyle
+  /** Font size in px, or any valid CSS font-size value. Default: inherits from parent */
+  size?: number | string
+  /** Accessible label. Omit for decorative icons. */
   label?: string
 }
 
-function Icon({ icon: LucideIconComponent, label, className, size = 16, ...props }: IconProps) {
+/**
+ * Icon — renders a Font Awesome icon via the loaded FA Kit.
+ *
+ * @example
+ * <Icon name="shield-check" size={24} label="Coverage" />
+ * <Icon name="car" faStyle="regular" className="text-[var(--primary)]" />
+ */
+function Icon({ name, faStyle = 'solid', size, label, className, style, ...props }: IconProps) {
+  const sizeStyle = size !== undefined
+    ? { fontSize: typeof size === 'number' ? `${size}px` : size }
+    : {}
+
   return (
-    <LucideIconComponent
-      className={cn('shrink-0', className)}
-      size={size}
+    <i
+      className={cn(`fa-${faStyle} fa-${name}`, 'shrink-0', className)}
+      style={{ ...sizeStyle, ...style }}
       aria-label={label}
       aria-hidden={!label}
       role={label ? 'img' : undefined}

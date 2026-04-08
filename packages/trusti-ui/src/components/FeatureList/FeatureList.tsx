@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Check } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 export interface FeatureItem {
@@ -40,9 +39,9 @@ function FeatureList({ items, size = 'md', className, ...props }: FeatureListPro
               )}
             >
               {item.icon ?? (
-                <Check
-                  className={size === 'sm' ? 'h-2.5 w-2.5' : 'h-3 w-3'}
-                  strokeWidth={3}
+                <i
+                  className={`fa-solid fa-check ${size === 'sm' ? 'text-[0.5rem]' : 'text-[0.625rem]'}`}
+                  aria-hidden="true"
                 />
               )}
             </span>

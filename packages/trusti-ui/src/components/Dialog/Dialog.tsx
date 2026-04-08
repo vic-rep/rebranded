@@ -1,6 +1,5 @@
 import * as React from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 const Dialog = DialogPrimitive.Root
@@ -55,7 +54,7 @@ const DialogContent = React.forwardRef<
           'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]',
           'disabled:pointer-events-none'
         )}>
-          <X className="h-4 w-4" />
+          <i className="fa-solid fa-xmark text-base" aria-hidden="true" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
       )}

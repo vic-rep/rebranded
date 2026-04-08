@@ -1,6 +1,5 @@
 import * as React from 'react'
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
-import { Check, ChevronRight, Circle } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 const DropdownMenu = DropdownMenuPrimitive.Root
@@ -52,7 +51,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem ref={ref} className={cn(menuItemClasses, 'pl-8', className)} checked={checked} {...props}>
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <Check className="h-4 w-4 text-[var(--primary)]" />
+        <i className="fa-solid fa-check text-sm text-[var(--primary)]" aria-hidden="true" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -67,7 +66,7 @@ const DropdownMenuRadioItem = React.forwardRef<
   <DropdownMenuPrimitive.RadioItem ref={ref} className={cn(menuItemClasses, 'pl-8', className)} {...props}>
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <Circle className="h-2 w-2 fill-[var(--primary)]" />
+        <i className="fa-solid fa-circle text-[0.5rem] text-[var(--primary)]" aria-hidden="true" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -97,7 +96,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
 >(({ className, inset, children, ...props }, ref) => (
   <DropdownMenuPrimitive.SubTrigger ref={ref} className={cn(menuItemClasses, 'data-[state=open]:bg-[color-mix(in_srgb,var(--foreground)_8%,transparent)]', inset && 'pl-8', className)} {...props}>
     {children}
-    <ChevronRight className="ml-auto h-4 w-4" />
+    <i className="fa-solid fa-chevron-right ml-auto text-sm" aria-hidden="true" />
   </DropdownMenuPrimitive.SubTrigger>
 ))
 DropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName
