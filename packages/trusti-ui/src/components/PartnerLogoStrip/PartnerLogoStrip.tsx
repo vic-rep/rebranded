@@ -20,11 +20,11 @@ function PartnerLogoStrip({ logos, label, className, ...props }: PartnerLogoStri
           {label}
         </p>
       )}
-      <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
+      <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8">
         {logos.map((logo) => (
           <div
             key={logo.name}
-            className="flex items-center justify-center opacity-40 grayscale hover:opacity-70 hover:grayscale-0 transition-all duration-200"
+            className="flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity duration-200"
             title={logo.name}
             style={{ minWidth: logo.width ?? 80 }}
           >

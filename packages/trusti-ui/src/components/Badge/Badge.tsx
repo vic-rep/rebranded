@@ -11,7 +11,7 @@ const badgeVariants = cva(
         primary:     'bg-[var(--color-clarity-green)] text-[var(--color-olive-black)]',
         secondary:   'bg-[var(--color-lavender-purple)] text-[var(--color-porcelain-white)]',
         outline:     'border border-[var(--border)] text-[var(--foreground)] bg-transparent',
-        destructive: 'bg-red-600 text-white',
+        destructive: 'bg-[var(--error)] text-white',
       },
       size: {
         sm: 'px-2 py-0.5 text-xs',

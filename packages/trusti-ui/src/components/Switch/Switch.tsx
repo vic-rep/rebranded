@@ -14,7 +14,7 @@ const Switch = React.forwardRef<
       'bg-[color-mix(in_srgb,var(--foreground)_20%,transparent)]',
       'transition-colors duration-150',
       'focus-visible:outline-none focus-visible:ring-2',
-      'focus-visible:ring-[var(--color-clarity-green)]',
+      'focus-visible:ring-[var(--primary)]',
       'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]',
       'data-[state=checked]:bg-[var(--color-clarity-green)]',
       'disabled:cursor-not-allowed disabled:opacity-50',
@@ -27,6 +27,7 @@ const Switch = React.forwardRef<
         'pointer-events-none block h-4 w-4 rounded-full',
         'bg-[var(--color-porcelain-white)] shadow-sm',
         'transition-transform duration-150',
+        'will-change-transform',
         'data-[state=checked]:translate-x-4',
         'data-[state=unchecked]:translate-x-0'
       )}

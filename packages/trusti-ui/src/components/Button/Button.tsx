@@ -9,7 +9,7 @@ const buttonVariants = cva(
     'font-[family-name:var(--font-heading)] font-semibold',
     'rounded-[var(--radius)] transition-colors duration-150',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-    'focus-visible:ring-[var(--color-clarity-green)]',
+    'focus-visible:ring-[var(--primary)]',
     'focus-visible:ring-offset-[var(--background)]',
     'disabled:pointer-events-none disabled:opacity-50',
     'cursor-pointer select-none whitespace-nowrap',
@@ -35,8 +35,8 @@ const buttonVariants = cva(
           'hover:bg-[color-mix(in_srgb,var(--foreground)_8%,transparent)]',
         ].join(' '),
         destructive: [
-          'bg-red-600 text-white',
-          'hover:bg-red-500',
+          'bg-[var(--error)] text-white',
+          'hover:bg-[color-mix(in_srgb,var(--error)_85%,black)]',
         ].join(' '),
       },
       size: {

@@ -9,6 +9,7 @@ function Skeleton({ className, ...props }: SkeletonProps) {
       className={cn(
         'animate-pulse rounded-[var(--radius)]',
         'bg-[color-mix(in_srgb,var(--foreground)_10%,transparent)]',
+        'will-change-[opacity]',
         className
       )}
       aria-hidden="true"
