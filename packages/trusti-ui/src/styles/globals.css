@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/* ─── Trusti Brand Tokens ─────────────────────────────────────────── */
+:root {
+  /* Palette */
+  --color-olive-black:     #0A1517;
+  --color-clarity-green:   #B9E856;
+  --color-lavender-purple: #9B5DE5;
+  --color-porcelain-white: #F9FAF5;
+
+  /* Typography */
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body:    'Nunito', sans-serif;
+
+  /* Semantic — light mode */
+  --background:         var(--color-porcelain-white);
+  --foreground:         var(--color-olive-black);
+  --primary:            var(--color-clarity-green);
+  --primary-foreground: var(--color-olive-black);
+  --secondary:          var(--color-lavender-purple);
+  --secondary-foreground: var(--color-porcelain-white);
+  --muted:              color-mix(in srgb, var(--color-olive-black) 70%, transparent);
+  --border:             color-mix(in srgb, var(--color-olive-black) 12%, transparent);
+  --radius:             0.5rem;
+}
+
+.dark {
+  /* Semantic — dark mode */
+  --background:         var(--color-olive-black);
+  --foreground:         var(--color-porcelain-white);
+  --primary:            var(--color-clarity-green);
+  --primary-foreground: var(--color-olive-black);
+  --secondary:          var(--color-lavender-purple);
+  --secondary-foreground: var(--color-porcelain-white);
+  --muted:              color-mix(in srgb, var(--color-porcelain-white) 70%, transparent);
+  --border:             color-mix(in srgb, var(--color-porcelain-white) 12%, transparent);
+}
+
+/* ─── Base styles ─────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* ─── Tailwind CSS v4 theme extension ─────────────────────────────── */
+@theme {
+  --color-olive-black:     #0A1517;
+  --color-clarity-green:   #B9E856;
+  --color-lavender-purple: #9B5DE5;
+  --color-porcelain-white: #F9FAF5;
+
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body:    'Nunito', sans-serif;
+}
