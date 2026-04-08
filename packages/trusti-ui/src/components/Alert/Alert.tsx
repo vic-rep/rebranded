@@ -10,8 +10,8 @@ const alertVariants = cva(
         default: 'border-[var(--border)] bg-[var(--background-subtle)] text-[var(--foreground)]',
         info:    'border-[var(--color-lavender-purple-300)] bg-[var(--secondary-subtle)] text-[var(--foreground)]',
         success: 'border-[var(--color-clarity-green-400)] bg-[var(--success-subtle)] text-[var(--foreground)]',
-        warning: 'border-yellow-400 bg-[var(--warning-subtle)] text-[var(--foreground)]',
-        error:   'border-red-400 bg-[var(--error-subtle)] text-[var(--foreground)]',
+        warning: 'border-[var(--warning)] bg-[var(--warning-subtle)] text-[var(--foreground)]',
+        error:   'border-[var(--error)] bg-[var(--error-subtle)] text-[var(--foreground)]',
       },
     },
     defaultVariants: { variant: 'default' },
@@ -22,8 +22,8 @@ const iconColor: Record<string, string> = {
   default: 'var(--foreground-muted)',
   info:    'var(--color-lavender-purple-500)',
   success: 'var(--color-clarity-green-600)',
-  warning: '#D97706',
-  error:   '#DC2626',
+  warning: 'var(--warning)',
+  error:   'var(--error)',
 }
 
 export interface AlertProps

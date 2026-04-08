@@ -17,8 +17,8 @@ function Toaster() {
           title: 'font-[family-name:var(--font-heading)] font-semibold text-sm',
           description: 'text-xs text-[var(--foreground-muted)]',
           success: '!border-[var(--color-clarity-green-400)]',
-          error: '!border-red-500',
-          warning: '!border-yellow-400',
+          error: '!border-[var(--error)]',
+          warning: '!border-[var(--warning)]',
           info: '!border-[var(--color-lavender-purple-500)]',
         },
       }}

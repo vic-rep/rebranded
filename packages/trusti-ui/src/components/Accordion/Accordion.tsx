@@ -35,7 +35,7 @@ const AccordionTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      <i className="fa-solid fa-chevron-down text-sm shrink-0 text-[var(--foreground-muted)] transition-transform duration-200" aria-hidden="true" />
+      <i className="fa-solid fa-chevron-down text-sm shrink-0 text-[var(--foreground-muted)] transition-transform duration-200 will-change-transform" aria-hidden="true" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))
