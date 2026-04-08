@@ -87,3 +87,40 @@ export { Toaster, toast } from './components/Toast'
 
 export { Progress } from './components/Progress'
 export type { ProgressProps } from './components/Progress'
+
+// ─── Tier 3 — Trusti Specific ─────────────────────────────────────────────────
+export { InsuranceProductCard } from './components/InsuranceProductCard'
+export type { InsuranceProductCardProps } from './components/InsuranceProductCard'
+
+export { PriceComparisonRow } from './components/PriceComparisonRow'
+export type { PriceComparisonRowProps } from './components/PriceComparisonRow'
+
+export { StepIndicator } from './components/StepIndicator'
+export type { StepIndicatorProps, Step, StepStatus } from './components/StepIndicator'
+
+export { TrustBadge, trustBadgeVariants } from './components/TrustBadge'
+export type { TrustBadgeProps } from './components/TrustBadge'
+
+export { RatingDisplay } from './components/RatingDisplay'
+export type { RatingDisplayProps } from './components/RatingDisplay'
+
+export { HeroSection } from './components/HeroSection'
+export type { HeroSectionProps } from './components/HeroSection'
+
+export { SectionHeader } from './components/SectionHeader'
+export type { SectionHeaderProps } from './components/SectionHeader'
+
+export { FeatureList } from './components/FeatureList'
+export type { FeatureListProps, FeatureItem } from './components/FeatureList'
+
+export { TestimonialCard } from './components/TestimonialCard'
+export type { TestimonialCardProps } from './components/TestimonialCard'
+
+export { FAQAccordion } from './components/FAQAccordion'
+export type { FAQAccordionProps, FAQItem } from './components/FAQAccordion'
+
+export { CTABanner } from './components/CTABanner'
+export type { CTABannerProps } from './components/CTABanner'
+
+export { PartnerLogoStrip } from './components/PartnerLogoStrip'
+export type { PartnerLogoStripProps, PartnerLogo } from './components/PartnerLogoStrip'
