@@ -148,7 +148,7 @@ const TOPO_LINES: TopoLine[] = (() => {
   const OB7 = 'var(--color-olive-black-700)', OB6 = 'var(--color-olive-black-600)', CG4 = 'var(--color-clarity-green-400)'
   const lines: TopoLine[] = []
   const add = (cx: number, cy: number, rings: Array<{ rx: number; ry: number; tilt: number; wobble: number; seed: number; idx?: boolean; acc?: boolean }>) => {
-    rings.forEach((r, i) => lines.push({ path: organicEllipse(cx, cy, r.rx, r.ry, r.tilt, r.wobble, r.seed), stroke: r.acc ? CG4 : r.idx ? OB6 : OB7, opacity: r.acc ? 0.52 : r.idx ? 0.44 : 0.28, width: r.acc ? 1.5 : r.idx ? 1.1 : 0.85, delay: i * 75, breathe: !!r.acc }))
+    rings.forEach((r, i) => lines.push({ path: organicEllipse(cx, cy, r.rx, r.ry, r.tilt, r.wobble, r.seed), stroke: r.acc ? CG4 : r.idx ? OB6 : OB7, opacity: r.acc ? 0.20 : r.idx ? 0.10 : 0.06, width: r.acc ? 1.5 : r.idx ? 1.1 : 0.85, delay: i * 75, breathe: !!r.acc }))
   }
   add(1020, 390, [
     { rx: 580, ry: 375, tilt: 7,  wobble: 0.13, seed: 800 },
@@ -198,8 +198,8 @@ function TrustiMark() {
     </span>
   )
 }
-function TrustiWordmark({ onDark = false }: { onDark?: boolean }) {
-  return <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.125rem', color: onDark ? 'var(--color-porcelain-white-100)' : 'var(--foreground)', letterSpacing: '-0.02em' }}>Trusti</span>
+function TrustiWordmark() {
+  return <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.125rem', color: 'var(--color-olive-black-900)', letterSpacing: '-0.02em' }}>Trusti</span>
 }
 
 /* ─── Data ──────────────────────────────────────────────────────────────────── */
@@ -243,13 +243,12 @@ function AnimStat({ stat, active }: { stat: typeof stats[number]; active: boolea
 
 function NavBar() {
   return (
-    <nav className="nav-enter sticky top-0 z-50 w-full" style={{ backgroundColor: 'color-mix(in srgb, var(--background) 95%, transparent)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid var(--border)' }}>
+    <nav className="nav-enter sticky top-0 z-50 w-full" style={{ backgroundColor: 'color-mix(in srgb, var(--color-porcelain-white-100) 95%, transparent)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(10,21,23,0.09)' }}>
       <div className="mx-auto flex items-center justify-between px-6 md:px-10" style={{ maxWidth: '80rem', height: '60px' }}>
         <div className="flex items-center gap-2.5"><TrustiMark /><TrustiWordmark /></div>
         <div className="flex items-center gap-5">
-          <a href="#partner" style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 600, color: 'var(--foreground-muted)', letterSpacing: '0.02em', textDecoration: 'none', transition: 'color 0.15s' }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'var(--foreground)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--foreground-muted)')}>Partner with us</a>
-          <ThemeToggle />
+          <a href="#partner" style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 600, color: 'color-mix(in srgb, var(--color-olive-black-900) 55%, transparent)', letterSpacing: '0.02em', textDecoration: 'none', transition: 'color 0.15s' }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-olive-black-900)')} onMouseLeave={e => (e.currentTarget.style.color = 'color-mix(in srgb, var(--color-olive-black-900) 55%, transparent)')}>Partner with us</a>
         </div>
       </div>
     </nav>
@@ -260,30 +259,30 @@ function NavBar() {
 
 function Hero() {
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: '100svh', backgroundColor: 'var(--color-olive-black-900)' }}>
+    <section className="relative w-full overflow-hidden" style={{ minHeight: '100svh', backgroundColor: 'var(--color-porcelain-white-100)' }}>
       <TopoBackground />
       <div className="relative z-10 mx-auto flex flex-col justify-center px-6 md:px-10 py-28 md:py-36" style={{ maxWidth: '80rem', minHeight: '100svh' }}>
         <div style={{ maxWidth: '52rem' }}>
           {/* Eyebrow */}
           <div className="hero-eyebrow flex items-center gap-3 mb-8">
-            <div style={{ width: '28px', height: '1px', backgroundColor: 'var(--color-clarity-green-400)', opacity: 0.8 }} />
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, color: 'var(--color-clarity-green-400)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>European Insurance Platform</span>
+            <div style={{ width: '28px', height: '1px', backgroundColor: 'var(--color-olive-black-700)', opacity: 0.5 }} />
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, color: 'var(--color-olive-black-700)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>European Insurance Platform</span>
           </div>
           {/* Headline */}
-          <h1 className="hero-h1" style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(2.8rem, 6.5vw, 5.5rem)', lineHeight: 1.05, letterSpacing: '-0.04em', color: 'var(--color-porcelain-white-100)' }}>
+          <h1 className="hero-h1" style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(2.8rem, 6.5vw, 5.5rem)', lineHeight: 1.05, letterSpacing: '-0.04em', color: 'var(--color-olive-black-900)' }}>
             The insurance<br />
             market,{' '}
-            <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'color-mix(in srgb, var(--color-porcelain-white-100) 60%, transparent)' }}>finally</em>
+            <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'color-mix(in srgb, var(--color-olive-black-900) 42%, transparent)' }}>finally</em>
             <br />on your side.
           </h1>
           {/* Sub */}
-          <p className="hero-p" style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', lineHeight: 1.75, color: 'color-mix(in srgb, var(--color-porcelain-white-100) 65%, transparent)', maxWidth: '38rem', marginTop: '1.75rem' }}>
+          <p className="hero-p" style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', lineHeight: 1.75, color: 'color-mix(in srgb, var(--color-olive-black-900) 62%, transparent)', maxWidth: '38rem', marginTop: '1.75rem' }}>
             Trusti is a licensed broker and price comparison platform. Every real offer, side by side — no pressure, nothing hidden, so you can choose what's right for you.
           </p>
           {/* Coming soon pill */}
-          <div className="hero-tag" style={{ marginTop: '2.25rem', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', border: '1px solid color-mix(in srgb, var(--color-clarity-green-400) 28%, transparent)', borderRadius: '999px' }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-clarity-green-400)', display: 'inline-block' }} />
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-clarity-green-400)', letterSpacing: '0.04em' }}>Expanding across EU in 2026</span>
+          <div className="hero-tag" style={{ marginTop: '2.25rem', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', border: '1px solid color-mix(in srgb, var(--color-olive-black-900) 14%, transparent)', borderRadius: '999px' }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-olive-black-700)', display: 'inline-block' }} />
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-olive-black-700)', letterSpacing: '0.04em' }}>Expanding across EU in 2026</span>
           </div>
         </div>
         {/* Bottom market row */}
@@ -291,7 +290,7 @@ function Hero() {
           {markets.map(m => (
             <div key={m.code} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '0.95rem', lineHeight: 1 }} aria-hidden>{m.flag}</span>
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.63rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-porcelain-white-100) 45%, transparent)' }}>{m.code}</span>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.63rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-olive-black-900) 45%, transparent)' }}>{m.code}</span>
             </div>
           ))}
         </div>
@@ -305,34 +304,34 @@ function Hero() {
 function Pillars() {
   const [ref, inView] = useInView(0.1)
   return (
-    <section ref={ref} className="w-full" style={{ backgroundColor: 'var(--background)' }}>
+    <section ref={ref} className="w-full" style={{ backgroundColor: 'var(--color-porcelain-white-100)' }}>
       <div className="mx-auto px-6 md:px-10 py-20 md:py-28" style={{ maxWidth: '80rem' }}>
         {/* Header */}
         <div className="mb-14 md:mb-18" style={reveal(inView, 0)}>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--foreground-subtle)', marginBottom: '10px' }}>What makes Trusti different</p>
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(2rem, 4vw, 3.25rem)', letterSpacing: '-0.03em', color: 'var(--foreground)', lineHeight: 1.1, maxWidth: '22ch' }}>Clarity over every alternative.</h2>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-olive-black-900) 40%, transparent)', marginBottom: '10px' }}>What makes Trusti different</p>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(2rem, 4vw, 3.25rem)', letterSpacing: '-0.03em', color: 'var(--color-olive-black-900)', lineHeight: 1.1, maxWidth: '22ch' }}>Clarity over every alternative.</h2>
         </div>
         {/* Rows */}
         {pillars.map((p, i) => (
           <div key={p.n} style={reveal(inView, 80 + i * 130)}>
-            <div style={{ height: '1px', backgroundColor: 'var(--border)' }} />
+            <div style={{ height: '1px', backgroundColor: 'rgba(10,21,23,0.09)' }} />
             <div style={{ display: 'grid', gridTemplateColumns: '56px 1fr', gap: '0 2.5rem', padding: '28px 0' }}>
               {/* Number + icon column */}
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', paddingTop: '2px' }}>
-                <span style={{ fontFamily: 'var(--font-heading)', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', color: 'var(--foreground-subtle)' }}>{p.n}</span>
-                <div style={{ width: '34px', height: '34px', borderRadius: '8px', backgroundColor: 'var(--background-muted)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon name={p.icon} size={14} style={{ color: 'var(--foreground)' }} />
+                <span style={{ fontFamily: 'var(--font-heading)', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-olive-black-900) 38%, transparent)' }}>{p.n}</span>
+                <div style={{ width: '34px', height: '34px', borderRadius: '8px', backgroundColor: '#F0F1EB', border: '1px solid rgba(10,21,23,0.09)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon name={p.icon} size={14} style={{ color: 'var(--color-olive-black-900)' }} />
                 </div>
               </div>
               {/* Content */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(1.1rem, 2vw, 1.4rem)', letterSpacing: '-0.025em', color: 'var(--foreground)', lineHeight: 1.25 }}>{p.heading}</h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', lineHeight: 1.8, color: 'var(--foreground-muted)', maxWidth: '54ch' }}>{p.body}</p>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(1.1rem, 2vw, 1.4rem)', letterSpacing: '-0.025em', color: 'var(--color-olive-black-900)', lineHeight: 1.25 }}>{p.heading}</h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', lineHeight: 1.8, color: 'color-mix(in srgb, var(--color-olive-black-900) 60%, transparent)', maxWidth: '54ch' }}>{p.body}</p>
               </div>
             </div>
           </div>
         ))}
-        <div style={{ height: '1px', backgroundColor: 'var(--border)', ...reveal(inView, 480) }} />
+        <div style={{ height: '1px', backgroundColor: 'rgba(10,21,23,0.09)', ...reveal(inView, 480) }} />
       </div>
     </section>
   )
@@ -343,34 +342,34 @@ function Pillars() {
 function Stats() {
   const [ref, inView] = useInView()
   return (
-    <section ref={ref} className="w-full" style={{ backgroundColor: 'var(--color-olive-black-900)' }}>
+    <section ref={ref} className="w-full" style={{ backgroundColor: '#ECEEE6' }}>
       <div className="mx-auto px-6 md:px-10 py-20 md:py-28" style={{ maxWidth: '80rem' }}>
         <div className="grid md:grid-cols-2 gap-14 md:gap-20 items-end">
           {/* Left statement */}
           <div style={reveal(inView, 0)}>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-porcelain-white-100) 38%, transparent)', marginBottom: '16px' }}>Built on proof</p>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.04em', lineHeight: 1.05, color: 'var(--color-porcelain-white-100)' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-olive-black-900) 45%, transparent)', marginBottom: '16px' }}>Built on proof</p>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.04em', lineHeight: 1.05, color: 'var(--color-olive-black-900)' }}>
               Real customers.<br />Real results.<br />
-              <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'color-mix(in srgb, var(--color-porcelain-white-100) 48%, transparent)' }}>Real numbers.</em>
+              <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'color-mix(in srgb, var(--color-olive-black-900) 48%, transparent)' }}>Real numbers.</em>
             </h2>
           </div>
           {/* Right stats */}
           <div>
             {/* Hero stat — full width */}
-            <div style={{ paddingBottom: '24px', marginBottom: '24px', borderBottom: '1px solid color-mix(in srgb, var(--color-porcelain-white-100) 10%, transparent)', ...reveal(inView, 120) }}>
-              <span className="tabular-nums" style={{ fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: 'clamp(3.5rem, 8vw, 6rem)', letterSpacing: '-0.05em', lineHeight: 1, color: 'var(--color-clarity-green-400)', display: 'block' }}>
+            <div style={{ paddingBottom: '24px', marginBottom: '24px', borderBottom: '1px solid color-mix(in srgb, var(--color-olive-black-900) 12%, transparent)', ...reveal(inView, 120) }}>
+              <span className="tabular-nums" style={{ fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: 'clamp(3.5rem, 8vw, 6rem)', letterSpacing: '-0.05em', lineHeight: 1, color: 'var(--color-olive-black-900)', display: 'block' }}>
                 <AnimStat stat={stats[0]} active={inView} />
               </span>
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', color: 'color-mix(in srgb, var(--color-porcelain-white-100) 50%, transparent)', marginTop: '4px', display: 'block' }}>{stats[0].label}</span>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', color: 'color-mix(in srgb, var(--color-olive-black-900) 50%, transparent)', marginTop: '4px', display: 'block' }}>{stats[0].label}</span>
             </div>
             {/* Three smaller */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0' }}>
               {stats.slice(1).map((s, i) => (
-                <div key={s.label} style={{ padding: '0', paddingRight: i < 2 ? '20px' : '0', paddingLeft: i > 0 ? '20px' : '0', borderRight: i < 2 ? '1px solid color-mix(in srgb, var(--color-porcelain-white-100) 10%, transparent)' : 'none', ...reveal(inView, 200 + i * 80) }}>
-                  <span className="tabular-nums" style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', letterSpacing: '-0.04em', color: 'var(--color-porcelain-white-100)', display: 'block', lineHeight: 1 }}>
+                <div key={s.label} style={{ padding: '0', paddingRight: i < 2 ? '20px' : '0', paddingLeft: i > 0 ? '20px' : '0', borderRight: i < 2 ? '1px solid color-mix(in srgb, var(--color-olive-black-900) 12%, transparent)' : 'none', ...reveal(inView, 200 + i * 80) }}>
+                  <span className="tabular-nums" style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', letterSpacing: '-0.04em', color: 'var(--color-olive-black-900)', display: 'block', lineHeight: 1 }}>
                     <AnimStat stat={s} active={inView} />
                   </span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'color-mix(in srgb, var(--color-porcelain-white-100) 42%, transparent)', marginTop: '5px', display: 'block', lineHeight: 1.4 }}>{s.label}</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.72rem', color: 'color-mix(in srgb, var(--color-olive-black-900) 48%, transparent)', marginTop: '5px', display: 'block', lineHeight: 1.4 }}>{s.label}</span>
                 </div>
               ))}
             </div>
@@ -386,15 +385,15 @@ function Stats() {
 function BentoGrid() {
   const [ref, inView] = useInView(0.06)
   return (
-    <section ref={ref} className="w-full" style={{ backgroundColor: 'var(--background)' }}>
+    <section ref={ref} className="w-full" style={{ backgroundColor: 'var(--color-porcelain-white-100)' }}>
       <div className="mx-auto px-6 md:px-10 py-20 md:py-28" style={{ maxWidth: '80rem' }}>
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12" style={reveal(inView, 0)}>
           <div>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--foreground-subtle)', marginBottom: '10px' }}>Product coverage</p>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', letterSpacing: '-0.03em', color: 'var(--foreground)', lineHeight: 1.1 }}>One platform.<br />Every product.</h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-olive-black-900) 40%, transparent)', marginBottom: '10px' }}>Product coverage</p>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', letterSpacing: '-0.03em', color: 'var(--color-olive-black-900)', lineHeight: 1.1 }}>One platform.<br />Every product.</h2>
           </div>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', lineHeight: 1.7, color: 'var(--foreground-muted)', maxWidth: '30ch' }}>Your customers compare all six categories in a single Trusti session.</p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', lineHeight: 1.7, color: 'color-mix(in srgb, var(--color-olive-black-900) 58%, transparent)', maxWidth: '30ch' }}>Your customers compare all six categories in a single Trusti session.</p>
         </div>
         {/* 4-column bento grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gridAutoRows: '158px', gap: '10px', ...reveal(inView, 80, 'in') }}>
@@ -407,24 +406,24 @@ function BentoGrid() {
                 borderRadius: '14px',
                 padding: isAnchor ? '24px' : '18px',
                 display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-                backgroundColor: p.accent ? 'var(--color-olive-black-900)' : 'var(--background-muted)',
-                border: `1px solid ${p.accent ? 'transparent' : 'var(--border)'}`,
+                backgroundColor: p.accent ? '#E4E6DE' : '#F0F1EB',
+                border: '1px solid rgba(10,21,23,0.08)',
                 overflow: 'hidden', position: 'relative',
                 opacity: inView ? 1 : 0,
                 transform: inView ? 'translateY(0)' : 'translateY(14px)',
                 transition: `opacity 0.5s ${QUINT} ${100 + idx * 55}ms, transform 0.5s ${QUINT} ${100 + idx * 55}ms`,
               }}>
                 {/* Icon box */}
-                <div style={{ width: isAnchor ? '44px' : '32px', height: isAnchor ? '44px' : '32px', borderRadius: '8px', backgroundColor: p.accent ? 'rgba(249,250,245,0.08)' : 'var(--background)', border: `1px solid ${p.accent ? 'rgba(249,250,245,0.12)' : 'var(--border)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon name={p.icon} size={isAnchor ? 18 : 14} style={{ color: p.accent ? 'var(--color-porcelain-white-100)' : 'var(--foreground)' }} />
+                <div style={{ width: isAnchor ? '44px' : '32px', height: isAnchor ? '44px' : '32px', borderRadius: '8px', backgroundColor: 'var(--color-porcelain-white-100)', border: '1px solid rgba(10,21,23,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon name={p.icon} size={isAnchor ? 18 : 14} style={{ color: 'var(--color-olive-black-900)' }} />
                 </div>
                 {/* Text */}
                 <div>
-                  <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: isAnchor ? '1.2rem' : '0.88rem', letterSpacing: '-0.02em', color: p.accent ? 'var(--color-porcelain-white-100)' : 'var(--foreground)', marginBottom: '3px', lineHeight: 1.2 }}>{p.name}</p>
-                  {isLarge && <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.76rem', lineHeight: 1.55, color: p.accent ? 'rgba(249,250,245,0.58)' : 'var(--foreground-muted)' }}>{p.desc}</p>}
+                  <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: isAnchor ? '1.2rem' : '0.88rem', letterSpacing: '-0.02em', color: 'var(--color-olive-black-900)', marginBottom: '3px', lineHeight: 1.2 }}>{p.name}</p>
+                  {isLarge && <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.76rem', lineHeight: 1.55, color: 'color-mix(in srgb, var(--color-olive-black-900) 58%, transparent)' }}>{p.desc}</p>}
                 </div>
                 {/* Anchor tile decorative orb */}
-                {isAnchor && <div style={{ position: 'absolute', bottom: '-24px', right: '-24px', width: '100px', height: '100px', borderRadius: '50%', backgroundColor: 'var(--color-clarity-green-400)', opacity: 0.07, pointerEvents: 'none' }} />}
+                {isAnchor && <div style={{ position: 'absolute', bottom: '-24px', right: '-24px', width: '100px', height: '100px', borderRadius: '50%', backgroundColor: 'var(--color-clarity-green-400)', opacity: 0.30, pointerEvents: 'none' }} />}
               </div>
             )
           })}
@@ -439,20 +438,20 @@ function BentoGrid() {
 function B2BSection() {
   const [ref, inView] = useInView(0.06)
   return (
-    <section ref={ref} id="partner" className="w-full" style={{ backgroundColor: 'var(--color-olive-black-900)' }}>
+    <section ref={ref} id="partner" className="w-full" style={{ backgroundColor: '#ECEEE6' }}>
       <div className="mx-auto px-6 md:px-10 py-20 md:py-28" style={{ maxWidth: '80rem' }}>
-        <div style={{ height: '1px', backgroundColor: 'color-mix(in srgb, var(--color-porcelain-white-100) 10%, transparent)', marginBottom: '48px', ...reveal(inView, 0, 'in') }} />
+        <div style={{ height: '1px', backgroundColor: 'color-mix(in srgb, var(--color-olive-black-900) 10%, transparent)', marginBottom: '48px', ...reveal(inView, 0, 'in') }} />
         <div className="grid md:grid-cols-2 gap-16 md:gap-20">
           {/* Left */}
           <div className="flex flex-col justify-between gap-12" style={reveal(inView, 60)}>
             <div>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-porcelain-white-100) 38%, transparent)', marginBottom: '18px' }}>For insurance providers</p>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(2.2rem, 4.5vw, 3.75rem)', letterSpacing: '-0.04em', lineHeight: 1.05, color: 'var(--color-porcelain-white-100)' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-olive-black-900) 45%, transparent)', marginBottom: '18px' }}>For insurance providers</p>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(2.2rem, 4.5vw, 3.75rem)', letterSpacing: '-0.04em', lineHeight: 1.05, color: 'var(--color-olive-black-900)' }}>
                 Your products.<br />
-                <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'color-mix(in srgb, var(--color-porcelain-white-100) 50%, transparent)' }}>Our</em> reach.<br />
+                <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'color-mix(in srgb, var(--color-olive-black-900) 45%, transparent)' }}>Our</em> reach.<br />
                 More customers.
               </h2>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.92rem', lineHeight: 1.75, color: 'color-mix(in srgb, var(--color-porcelain-white-100) 60%, transparent)', marginTop: '18px', maxWidth: '36ch' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.92rem', lineHeight: 1.75, color: 'color-mix(in srgb, var(--color-olive-black-900) 62%, transparent)', marginTop: '18px', maxWidth: '36ch' }}>
                 Direct access to digitally-active European buyers — without the infrastructure cost of building your own comparison channel.
               </p>
             </div>
@@ -460,24 +459,24 @@ function B2BSection() {
               <Button asChild variant="primary" size="lg" style={{ letterSpacing: '-0.01em', alignSelf: 'flex-start' }}>
                 <a href="mailto:partnerships@trusti.bg">Partner with Trusti <span className="cta-arrow">→</span></a>
               </Button>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'color-mix(in srgb, var(--color-porcelain-white-100) 38%, transparent)' }}>No commitment. Just a conversation.</p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'color-mix(in srgb, var(--color-olive-black-900) 42%, transparent)' }}>No commitment. Just a conversation.</p>
             </div>
           </div>
           {/* Right VP list */}
           <div className="flex flex-col justify-center" style={reveal(inView, 180)}>
             {vps.map((vp, i) => (
               <div key={vp.n}>
-                <div style={{ height: '1px', backgroundColor: 'color-mix(in srgb, var(--color-porcelain-white-100) 9%, transparent)', marginBottom: '22px' }} />
+                <div style={{ height: '1px', backgroundColor: 'color-mix(in srgb, var(--color-olive-black-900) 10%, transparent)', marginBottom: '22px' }} />
                 <div style={{ display: 'grid', gridTemplateColumns: '28px 1fr', gap: '0 18px', paddingBottom: '22px' }}>
-                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', color: 'color-mix(in srgb, var(--color-porcelain-white-100) 28%, transparent)', paddingTop: '3px' }}>{vp.n}</span>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', color: 'color-mix(in srgb, var(--color-olive-black-900) 30%, transparent)', paddingTop: '3px' }}>{vp.n}</span>
                   <div>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '0.98rem', letterSpacing: '-0.02em', color: 'var(--color-porcelain-white-100)', marginBottom: '5px', lineHeight: 1.3 }}>{vp.heading}</h3>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', lineHeight: 1.7, color: 'color-mix(in srgb, var(--color-porcelain-white-100) 52%, transparent)' }}>{vp.body}</p>
+                    <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '0.98rem', letterSpacing: '-0.02em', color: 'var(--color-olive-black-900)', marginBottom: '5px', lineHeight: 1.3 }}>{vp.heading}</h3>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', lineHeight: 1.7, color: 'color-mix(in srgb, var(--color-olive-black-900) 58%, transparent)' }}>{vp.body}</p>
                   </div>
                 </div>
               </div>
             ))}
-            <div style={{ height: '1px', backgroundColor: 'color-mix(in srgb, var(--color-porcelain-white-100) 9%, transparent)' }} />
+            <div style={{ height: '1px', backgroundColor: 'color-mix(in srgb, var(--color-olive-black-900) 10%, transparent)' }} />
           </div>
         </div>
       </div>
@@ -489,23 +488,23 @@ function B2BSection() {
 
 function Footer() {
   return (
-    <footer className="w-full" style={{ backgroundColor: 'var(--color-olive-black-900)', borderTop: '1px solid var(--color-olive-black-700)' }}>
+    <footer className="w-full" style={{ backgroundColor: '#E6E8DF', borderTop: '1px solid color-mix(in srgb, var(--color-olive-black-900) 10%, transparent)' }}>
       <div className="mx-auto px-6 md:px-10 py-12 md:py-16 grid md:grid-cols-3 gap-10" style={{ maxWidth: '80rem' }}>
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2.5"><TrustiMark /><TrustiWordmark onDark /></div>
-          <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.78rem', color: 'var(--color-clarity-green-400)' }}>Insurance without the runaround.</p>
+          <div className="flex items-center gap-2.5"><TrustiMark /><TrustiWordmark /></div>
+          <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.78rem', color: 'color-mix(in srgb, var(--color-olive-black-900) 55%, transparent)' }}>Insurance without the runaround.</p>
         </div>
         <div className="flex flex-col gap-4">
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-porcelain-white-100) 32%, transparent)' }}>Active markets</p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-olive-black-900) 38%, transparent)' }}>Active markets</p>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {markets.map(m => (
               <div key={m.code} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                 <span style={{ fontSize: '0.9rem', lineHeight: 1 }} aria-hidden>{m.flag}</span>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-porcelain-white-100) 48%, transparent)' }}>{m.code}</span>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-olive-black-900) 50%, transparent)' }}>{m.code}</span>
               </div>
             ))}
           </div>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.65rem', lineHeight: 1.65, color: 'color-mix(in srgb, var(--color-porcelain-white-100) 40%, transparent)' }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.65rem', lineHeight: 1.65, color: 'color-mix(in srgb, var(--color-olive-black-900) 48%, transparent)' }}>
             Licensed insurance broker under European financial services regulation. Active in Bulgaria, Italy, and expanding across Europe.
           </p>
         </div>
@@ -513,14 +512,14 @@ function Footer() {
           <div className="flex items-center gap-3">
             {(['linkedin', 'instagram'] as const).map(name => (
               <a key={name} href="#" aria-label={`Trusti on ${name}`} className="inline-flex items-center justify-center w-8 h-8 rounded-[var(--radius)] transition-colors duration-150"
-                style={{ color: 'color-mix(in srgb, var(--color-porcelain-white-100) 38%, transparent)' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--color-porcelain-white-100)' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'color-mix(in srgb, var(--color-porcelain-white-100) 38%, transparent)' }}>
+                style={{ color: 'color-mix(in srgb, var(--color-olive-black-900) 38%, transparent)' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--color-olive-black-900)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'color-mix(in srgb, var(--color-olive-black-900) 38%, transparent)' }}>
                 <Icon name={name} faStyle="brands" size={15} aria-hidden />
               </a>
             ))}
           </div>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.65rem', color: 'color-mix(in srgb, var(--color-porcelain-white-100) 28%, transparent)' }}>© 2026 Trusti. All rights reserved.</p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.65rem', color: 'color-mix(in srgb, var(--color-olive-black-900) 38%, transparent)' }}>© 2026 Trusti. All rights reserved.</p>
         </div>
       </div>
     </footer>
@@ -538,7 +537,7 @@ export default function EuComingSoonPartner() {
   }, [])
 
   return (
-    <div style={{ backgroundColor: 'var(--color-olive-black-900)' }}>
+    <div style={{ backgroundColor: 'var(--color-porcelain-white-100)' }}>
       {/* eslint-disable-next-line react/no-danger */}
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <ScrollProgress />
