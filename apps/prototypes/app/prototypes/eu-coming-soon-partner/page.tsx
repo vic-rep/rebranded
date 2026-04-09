@@ -148,13 +148,17 @@ const TOPO_LINES: TopoLine[] = (() => {
   const OB7 = 'var(--color-olive-black-700)', OB6 = 'var(--color-olive-black-600)', CG4 = 'var(--color-clarity-green-400)'
   const lines: TopoLine[] = []
   const PERIOD = 9000, STAGGER = 180
-  // N=16 anchor points for smoother organic curves; loopDelay drives the left→right phase wave
+  const DRAW_STEP = 310  // ms between sequential contour starts
+  let seq = 0
+  // N=16 anchor points; seq counter drives strict one-at-a-time draw-in order
   const add = (cx: number, cy: number, rings: Array<{ rx: number; ry: number; tilt: number; wobble: number; seed: number; idx?: boolean; acc?: boolean }>) => {
     const peakPhase = (cx / 1440) * PERIOD
     rings.forEach((r, i) => {
+      const delay = seq * DRAW_STEP
+      seq++
       const loopDelay = peakPhase + (rings.length - 1 - i) * STAGGER
-      const [lo, hi] = r.acc ? ['0.12', '0.30'] : r.idx ? ['0.06', '0.16'] : ['0.035', '0.10']
-      lines.push({ path: organicEllipse(cx, cy, r.rx, r.ry, r.tilt, r.wobble, r.seed, 16), stroke: r.acc ? CG4 : r.idx ? OB6 : OB7, lo, hi, width: r.acc ? 1.6 : r.idx ? 1.1 : 0.8, delay: i * 55, loopDelay })
+      const [lo, hi] = r.acc ? ['0.32', '0.58'] : r.idx ? ['0.24', '0.44'] : ['0.14', '0.28']
+      lines.push({ path: organicEllipse(cx, cy, r.rx, r.ry, r.tilt, r.wobble, r.seed, 16), stroke: r.acc ? CG4 : r.idx ? OB6 : OB7, lo, hi, width: r.acc ? 1.6 : r.idx ? 1.1 : 0.8, delay, loopDelay })
     })
   }
 
@@ -227,7 +231,9 @@ function TopoBackground() {
             '--topo-lo': l.lo,
             '--topo-hi': l.hi,
             strokeDasharray: '5000',
-            animation: `draw-contour 2.2s ${EXPO} ${l.delay}ms both, topo-wave 9s ease-in-out ${l.delay + 2200 - l.loopDelay}ms infinite`,
+            // draw-contour: 0.45s per line, strict sequential via delay
+            // topo-wave: starts after all 37 lines drawn (~12s); backwards fill holds --topo-lo during draw-in
+            animation: `draw-contour 0.45s ${EXPO} ${l.delay}ms both, topo-wave 9s ease-in-out ${12000 - l.loopDelay}ms backwards infinite`,
           } as React.CSSProperties} />
       ))}
     </svg>
@@ -307,30 +313,30 @@ function NavBar() {
 
 function Hero() {
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: '100svh', backgroundColor: 'var(--color-porcelain-white-100)' }}>
+    <section className="relative w-full overflow-hidden" style={{ minHeight: '100svh', backgroundColor: 'var(--color-olive-black-900)' }}>
       <TopoBackground />
       <div className="relative z-10 mx-auto flex flex-col justify-center px-6 md:px-10 py-28 md:py-36" style={{ maxWidth: '80rem', minHeight: '100svh' }}>
         <div style={{ maxWidth: '52rem' }}>
           {/* Eyebrow */}
           <div className="hero-eyebrow flex items-center gap-3 mb-8">
-            <div style={{ width: '28px', height: '1px', backgroundColor: 'var(--color-olive-black-700)', opacity: 0.5 }} />
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, color: 'var(--color-olive-black-700)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>European Insurance Platform</span>
+            <div style={{ width: '28px', height: '1px', backgroundColor: 'var(--color-clarity-green-400)', opacity: 0.8 }} />
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.7rem', fontWeight: 700, color: 'var(--color-clarity-green-400)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>European Insurance Platform</span>
           </div>
           {/* Headline */}
-          <h1 className="hero-h1" style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(2.8rem, 6.5vw, 5.5rem)', lineHeight: 1.05, letterSpacing: '-0.04em', color: 'var(--color-olive-black-900)' }}>
+          <h1 className="hero-h1" style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 'clamp(2.8rem, 6.5vw, 5.5rem)', lineHeight: 1.05, letterSpacing: '-0.04em', color: 'var(--color-porcelain-white-100)' }}>
             The insurance<br />
             market,{' '}
-            <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'color-mix(in srgb, var(--color-olive-black-900) 42%, transparent)' }}>finally</em>
+            <em style={{ fontStyle: 'italic', fontWeight: 300, color: 'color-mix(in srgb, var(--color-porcelain-white-100) 60%, transparent)' }}>finally</em>
             <br />on your side.
           </h1>
           {/* Sub */}
-          <p className="hero-p" style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', lineHeight: 1.75, color: 'color-mix(in srgb, var(--color-olive-black-900) 62%, transparent)', maxWidth: '38rem', marginTop: '1.75rem' }}>
+          <p className="hero-p" style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', lineHeight: 1.75, color: 'color-mix(in srgb, var(--color-porcelain-white-100) 65%, transparent)', maxWidth: '38rem', marginTop: '1.75rem' }}>
             Trusti is a licensed broker and price comparison platform. Every real offer, side by side — no pressure, nothing hidden, so you can choose what's right for you.
           </p>
           {/* Coming soon pill */}
-          <div className="hero-tag" style={{ marginTop: '2.25rem', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', border: '1px solid color-mix(in srgb, var(--color-olive-black-900) 14%, transparent)', borderRadius: '999px' }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-olive-black-700)', display: 'inline-block' }} />
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-olive-black-700)', letterSpacing: '0.04em' }}>Expanding across EU in 2026</span>
+          <div className="hero-tag" style={{ marginTop: '2.25rem', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', border: '1px solid color-mix(in srgb, var(--color-clarity-green-400) 28%, transparent)', borderRadius: '999px' }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-clarity-green-400)', display: 'inline-block' }} />
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-clarity-green-400)', letterSpacing: '0.04em' }}>Expanding across EU in 2026</span>
           </div>
         </div>
         {/* Bottom market row */}
@@ -338,7 +344,7 @@ function Hero() {
           {markets.map(m => (
             <div key={m.code} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '0.95rem', lineHeight: 1 }} aria-hidden>{m.flag}</span>
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.63rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-olive-black-900) 45%, transparent)' }}>{m.code}</span>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.63rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'color-mix(in srgb, var(--color-porcelain-white-100) 45%, transparent)' }}>{m.code}</span>
             </div>
           ))}
         </div>
