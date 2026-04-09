@@ -28,9 +28,9 @@ const CSS = `
     from { stroke-dashoffset: 5000; }
     to   { stroke-dashoffset: 0; }
   }
-  @keyframes contour-breathe {
-    0%, 100% { opacity: 0.52; }
-    50%       { opacity: 0.30; }
+  @keyframes topo-wave {
+    0%, 100% { opacity: var(--topo-lo); }
+    50%       { opacity: var(--topo-hi); }
   }
 
   .nav-enter    { animation: nav-enter 0.45s cubic-bezier(0.16,1,0.3,1) both; }
@@ -143,13 +143,19 @@ function organicEllipse(cx: number, cy: number, rx: number, ry: number, tiltDeg:
   d.push('Z'); return d.join(' ')
 }
 
-interface TopoLine { path: string; stroke: string; opacity: number; width: number; delay: number; breathe: boolean }
+interface TopoLine { path: string; stroke: string; lo: string; hi: string; width: number; delay: number; loopDelay: number }
 const TOPO_LINES: TopoLine[] = (() => {
   const OB7 = 'var(--color-olive-black-700)', OB6 = 'var(--color-olive-black-600)', CG4 = 'var(--color-clarity-green-400)'
   const lines: TopoLine[] = []
-  // N=16 anchor points for smoother organic curves
+  const PERIOD = 9000, STAGGER = 180
+  // N=16 anchor points for smoother organic curves; loopDelay drives the left→right phase wave
   const add = (cx: number, cy: number, rings: Array<{ rx: number; ry: number; tilt: number; wobble: number; seed: number; idx?: boolean; acc?: boolean }>) => {
-    rings.forEach((r, i) => lines.push({ path: organicEllipse(cx, cy, r.rx, r.ry, r.tilt, r.wobble, r.seed, 16), stroke: r.acc ? CG4 : r.idx ? OB6 : OB7, opacity: r.acc ? 0.22 : r.idx ? 0.11 : 0.07, width: r.acc ? 1.6 : r.idx ? 1.1 : 0.8, delay: i * 55, breathe: !!r.acc }))
+    const peakPhase = (cx / 1440) * PERIOD
+    rings.forEach((r, i) => {
+      const loopDelay = peakPhase + (rings.length - 1 - i) * STAGGER
+      const [lo, hi] = r.acc ? ['0.12', '0.30'] : r.idx ? ['0.06', '0.16'] : ['0.035', '0.10']
+      lines.push({ path: organicEllipse(cx, cy, r.rx, r.ry, r.tilt, r.wobble, r.seed, 16), stroke: r.acc ? CG4 : r.idx ? OB6 : OB7, lo, hi, width: r.acc ? 1.6 : r.idx ? 1.1 : 0.8, delay: i * 55, loopDelay })
+    })
   }
 
   // Peak 1 — dominant hill, right of centre
@@ -216,8 +222,13 @@ function TopoBackground() {
   return (
     <svg className="absolute inset-0 w-full h-full pointer-events-none select-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden>
       {TOPO_LINES.map((l, i) => (
-        <path key={i} d={l.path} fill="none" stroke={l.stroke} strokeWidth={l.width} opacity={l.opacity} strokeLinecap="round" strokeLinejoin="round"
-          style={{ strokeDasharray: '5000', animation: l.breathe ? `draw-contour 2.2s ${EXPO} ${l.delay}ms both, contour-breathe 7s ease-in-out ${l.delay + 2200}ms infinite` : `draw-contour 2.2s ${EXPO} ${l.delay}ms both` }} />
+        <path key={i} d={l.path} fill="none" stroke={l.stroke} strokeWidth={l.width} strokeLinecap="round" strokeLinejoin="round"
+          style={{
+            '--topo-lo': l.lo,
+            '--topo-hi': l.hi,
+            strokeDasharray: '5000',
+            animation: `draw-contour 2.2s ${EXPO} ${l.delay}ms both, topo-wave 9s ease-in-out ${l.delay + 2200 - l.loopDelay}ms infinite`,
+          } as React.CSSProperties} />
       ))}
     </svg>
   )
